@@ -1,0 +1,981 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark"><meta name="description" content="离线运行的无畏契约个人灵敏度测评：免点击甩枪、微调、跟枪，多档对比生成可输入游戏的数值。">
+<title>准度档案 · 无畏契约灵敏度实验室</title>
+<style>
+:root{--bg:#0b1016;--panel:#121a23;--panel2:#18222e;--line:#27333f;--text:#e9eef2;--muted:#8c9caa;--mint:#95f4d4;--red:#ff5966;--mono:Consolas,'SFMono-Regular',monospace;--sans:'Segoe UI','Microsoft YaHei',sans-serif}*{box-sizing:border-box}body{margin:0;font:14px/1.65 var(--sans);background:var(--bg);color:var(--text)}button,input,select{font:inherit}button,a,input,select{ -webkit-tap-highlight-color:transparent}button{cursor:pointer}button:disabled{opacity:.38;cursor:not-allowed}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid var(--mint);outline-offset:4px}a{color:var(--mint);text-underline-offset:3px}button{border:0}h1,h2,h3,p{margin:0}h1{font-size:45px;letter-spacing:-2px;line-height:1.27}h2{font-size:23px;font-weight:650;letter-spacing:-.5px}h3{font-size:16px}small{font-size:11px}.mono{font-family:var(--mono)}.muted{color:var(--muted)}.mint{color:var(--mint)}.red{color:var(--red)}.tag{display:inline-flex;gap:7px;align-items:center;border:1px solid var(--line);padding:4px 9px;font-size:11px;letter-spacing:1px;color:var(--muted)}.dot{display:inline-block;width:6px;height:6px;background:var(--mint);border-radius:50%;box-shadow:0 0 9px #95f4d43b}.icon{display:inline-flex;width:20px;height:20px;align-items:center;justify-content:center;font:18px var(--mono)}.app{display:grid;grid-template-columns:222px minmax(0,1fr);min-height:100vh}.sidebar{position:sticky;top:0;height:100vh;padding:32px 20px 20px;border-right:1px solid var(--line);display:flex;flex-direction:column;background:#0e151d}.brand{display:flex;gap:12px;align-items:center;margin:0 8px 44px}.brand-mark{width:36px;height:36px;position:relative;border:1px solid var(--red);transform:rotate(-4deg)}.brand-mark:before,.brand-mark:after{content:'';position:absolute;background:var(--red)}.brand-mark:before{width:22px;height:3px;left:6px;top:15px;transform:rotate(-45deg)}.brand-mark:after{width:3px;height:22px;left:15px;top:6px;transform:rotate(-45deg)}.brand strong{font-size:17px;letter-spacing:2px}.brand small{font:9px var(--mono);letter-spacing:1.6px;display:block;color:var(--muted);margin-top:2px}.nav-label{padding-left:14px;font:10px var(--mono);color:#637585;letter-spacing:2px;margin-bottom:13px}.nav{display:grid;gap:7px}.nav button{display:flex;align-items:center;gap:14px;width:100%;padding:13px;color:var(--muted);background:transparent;text-align:left;border-left:2px solid transparent}.nav button span:first-child{font:11px var(--mono);opacity:.6}.nav button.active{border-color:var(--red);background:#ff59660c;color:#fff}.nav button:hover{background:#ffffff05}.sidebar-bottom{margin-top:auto;padding:25px 10px 0}.local-note{padding:14px 0;border-top:1px solid var(--line);color:var(--muted);font-size:11px}.local-note strong{display:block;color:#becbd4;font-size:12px;margin-bottom:5px}.sidebar-foot{font:9px var(--mono);letter-spacing:1px;color:#596c7d;margin-top:15px}.main{min-width:0;max-width:1560px;padding:0 42px 38px}.topbar{height:79px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:15px}.breadcrumb{font-size:12px;color:var(--muted)}.breadcrumb b{font-weight:500;color:#dbe4eb;margin-left:10px}.top-status{display:flex;align-items:center;gap:9px;font:10px var(--mono);letter-spacing:1px;color:#a6b5c1}.page-head{display:flex;justify-content:space-between;align-items:flex-end;padding:35px 0 27px;gap:24px}.eyebrow{font:10px var(--mono);letter-spacing:2.4px;color:var(--red);margin-bottom:12px}.page-head p{margin-top:12px;color:var(--muted);font-size:13px}.head-code{text-align:right;font:10px/1.9 var(--mono);color:#607586;letter-spacing:1px;white-space:nowrap}.hero{display:grid;grid-template-columns:1.05fr 1fr;min-height:220px;background:#14202b;border:1px solid #2b3a47;overflow:hidden;position:relative;margin-bottom:27px}.hero-copy{padding:28px 31px;position:relative;z-index:1}.hero h2{font-size:25px;margin:13px 0 9px}.hero p{color:#a3b4c1;max-width:370px;font-size:12px}.hero-pills{display:flex;gap:17px;margin-top:20px;font:10px var(--mono);color:var(--mint)}.hero-art{position:relative;min-height:220px;overflow:hidden;background:radial-gradient(ellipse at 55% 40%,#24424b55,transparent 65%)}.hero-art svg{position:absolute;width:100%;height:100%}.art-caption{position:absolute;bottom:15px;right:20px;font:9px var(--mono);letter-spacing:2px;color:#718997}.cross-art{position:absolute;left:54%;top:47%;width:26px;height:26px}.cross-art:before,.cross-art:after{content:'';position:absolute;background:var(--mint);box-shadow:0 0 10px #95f4d430}.cross-art:before{width:26px;height:1px;top:13px}.cross-art:after{height:26px;width:1px;left:13px}.art-line{position:absolute;right:0;top:0;width:90px;height:3px;background:var(--red)}.content-grid{display:grid;grid-template-columns:minmax(0,1.52fr) minmax(270px,.9fr);gap:23px}.panel{border:1px solid var(--line);background:var(--panel)}.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:21px 25px;border-bottom:1px solid var(--line)}.panel-head h3{display:flex;gap:10px;align-items:center}.panel-num{color:var(--red);font:11px var(--mono)}.panel-body{padding:24px 25px}.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.field{display:flex;flex-direction:column;gap:8px}.field label{font-size:12px;color:#c9d5df}.field label span{font-size:10px;color:#6b8293;margin-left:5px}.input-wrap{position:relative}input,select{width:100%;height:43px;border:1px solid #31404c;background:#0d151e;color:#e6edf2;border-radius:0;padding:0 12px}input{font-family:var(--mono);font-size:16px}select{font-size:12px;appearance:auto}input:focus,select:focus{border-color:var(--mint);outline:0}.unit{position:absolute;right:12px;top:12px;font:10px var(--mono);color:#627b8c;pointer-events:none}.field small{color:#778c9c;font-size:10px;line-height:1.6}.separator{height:1px;background:var(--line);margin:23px 0}.choice-group{display:flex;gap:7px}.choice{flex:1;padding:11px 4px;background:#0d151e;border:1px solid var(--line);color:#8fa1b0;font-size:12px}.choice.selected{background:#95f4d40c;color:var(--mint);border-color:#95f4d466}.inline-label{font-size:12px;margin-bottom:10px;color:#c9d5df}.field-full{grid-column:1/-1}.form-footer{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-top:25px}.btn{display:inline-flex;align-items:center;justify-content:center;gap:15px;min-height:43px;padding:11px 20px;font-size:12px;font-weight:600;letter-spacing:.2px}.btn-primary{background:var(--red);color:#11151c}.btn-primary:hover{background:#ff7882}.btn-secondary{background:#1d2b37;border:1px solid #3a4b59;color:#dfebf3}.btn-ghost{background:transparent;color:#9db0bf;border:1px solid var(--line)}.btn-mint{background:var(--mint);color:#0c201b}.btn-wide{width:100%}.form-error{font-size:12px;color:#ff8790;margin-top:12px;min-height:0}.protocol{padding:0 23px}.protocol-item{display:grid;grid-template-columns:35px 1fr auto;gap:10px;align-items:start;padding:20px 0;border-bottom:1px solid var(--line)}.protocol-item:last-child{border:0}.task-icon{width:30px;height:30px;background:#1d2a34;color:var(--mint);display:flex;align-items:center;justify-content:center;font:18px var(--mono)}.protocol-item h3{font-size:13px;margin-bottom:5px}.protocol-item p{font-size:11px;color:var(--muted)}.task-meta{font:9px var(--mono);color:#687e8e;padding-top:4px}.info-box{border:1px solid #95f4d426;background:#95f4d406;padding:15px 18px;font-size:11px;color:#9ebaae;line-height:1.8;margin-top:20px}.info-box b{color:var(--mint);font-weight:500}.warning{border-color:#ffbc652f;background:#ffbc6508;color:#c6b39a}.warning b{color:#f2c485}.stats-strip{display:grid;grid-template-columns:repeat(3,1fr);margin-top:20px;border-top:1px solid var(--line);padding-top:19px}.stats-strip strong{font:20px var(--mono);display:block}.stats-strip span{font-size:10px;color:var(--muted)}.footer{display:flex;justify-content:space-between;gap:20px;margin-top:30px;padding-top:18px;border-top:1px solid var(--line);font-size:10px;color:#617586}.footer span:last-child{font:9px var(--mono);letter-spacing:1px}.view[hidden]{display:none}.calib-grid{display:grid;grid-template-columns:1.25fr 1fr;gap:23px}.numbered{list-style:none;margin:0;padding:0;counter-reset:steps}.numbered li{position:relative;padding:0 0 22px 35px;color:#b6c5d0;font-size:12px;counter-increment:steps}.numbered li:before{content:'0' counter(steps);position:absolute;left:0;top:1px;font:10px var(--mono);color:var(--red)}.numbered b{font-weight:500;color:#fff}.equation{padding:20px;text-align:center;border:1px solid var(--line);background:#0d151e;margin:15px 0;font:13px/2 var(--mono);color:var(--mint)}.key{border:1px solid #4b5d6b;padding:2px 6px;font:10px var(--mono);color:#e0e8ed;background:#ffffff05}.space-between{display:flex;justify-content:space-between;align-items:center;gap:15px}.calib-status{font-size:12px;padding:14px;background:#0d151e;border-left:2px solid var(--mint);margin-bottom:20px;color:#b3c6d2}.suite-top{display:grid;grid-template-columns:1fr 1fr 1fr;gap:15px;margin-bottom:23px}.metric-card{background:var(--panel);border:1px solid var(--line);padding:18px 22px}.metric-card strong{font:27px var(--mono);display:block}.metric-card span{font-size:11px;color:var(--muted)}.rounds{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:20px 0}.round{background:#0d151e;border:1px solid var(--line);padding:13px 14px;color:#748a9b;font-size:11px}.round b{display:block;color:#a7b9c6;font:12px var(--mono);margin-bottom:5px}.round.done{border-color:#95f4d43b;background:#95f4d406}.round.done b{color:var(--mint)}.round.current{border-color:var(--red)}.round.current b{color:var(--red)}.progress-track{height:3px;background:#23313d;margin-top:20px}.progress-fill{height:100%;background:var(--red);transition:width .3s}.suite-actions{display:flex;gap:10px;flex-wrap:wrap}.mini-label{font:10px var(--mono);letter-spacing:1px;color:#8298a8}.big-value{font:76px/1.15 var(--mono);letter-spacing:-5px;color:var(--mint);margin:18px 0 7px}.report-main{display:grid;grid-template-columns:1.15fr 1fr;gap:23px;margin-bottom:23px}.result-card{padding:29px;border:1px solid #95f4d44a;background:linear-gradient(135deg,#172b2b,#121b23 75%);position:relative}.result-card:after{content:'RECOMMENDED';position:absolute;right:0;top:0;padding:5px 11px;background:var(--mint);font:9px var(--mono);letter-spacing:1px;color:#16382f}.result-description{font-size:12px;color:#a6bfb9}.result-metrics{display:flex;gap:35px;margin:25px 0}.result-metrics b{display:block;font:20px var(--mono);color:#d4e3e7}.result-metrics span{font-size:10px;color:#7e9a9b}.report-table{width:100%;border-collapse:collapse;font-size:11px}.report-table th{text-align:left;color:#728999;font-size:10px;font-weight:500;padding:12px 13px;border-bottom:1px solid var(--line)}.report-table td{padding:16px 13px;border-bottom:1px solid var(--line);font-family:var(--mono)}.report-table tr.winner{background:#95f4d408;color:var(--mint)}.report-table td:first-child{font-family:var(--sans)}.score-bar{height:4px;background:#263541;width:75px;margin-top:7px}.score-bar i{display:block;height:100%;background:var(--mint)}.explanation{font-size:12px;color:#a4b9c8;line-height:1.9}.explanation p{margin-bottom:12px}.history{display:flex;gap:10px;flex-wrap:wrap;margin-top:13px}.history button{padding:12px 17px;background:#121c25;border:1px solid var(--line);color:#a7bdcb;text-align:left;font-size:11px}.history b{display:block;font:19px var(--mono);color:var(--mint)}details{margin-top:23px;border:1px solid var(--line);padding:16px 20px;font-size:11px;color:#8da4b4}summary{cursor:pointer;color:#a9bfcd}details p{margin-top:12px}details ul{padding-left:20px;margin-bottom:4px}.empty{padding:50px 25px;text-align:center}.empty p{max-width:420px;margin:13px auto 25px;font-size:12px;color:var(--muted)}
+.stage{position:fixed;inset:0;z-index:50;background:#0b121a;display:flex;flex-direction:column}.stage[hidden]{display:none}.stage-top{height:75px;padding:0 30px;border-bottom:1px solid #2c3c48;display:flex;align-items:center;justify-content:space-between;gap:15px;background:#101b26}.stage-title{font-size:14px}.stage-title small{display:block;color:#7e96a8;font:10px var(--mono);letter-spacing:1px;margin-top:4px}.stage-stats{display:flex;gap:32px;align-items:center}.stage-stats span{font:11px var(--mono);color:#8ba4b5}.stage-stats b{font:25px var(--mono);color:#e9f3f7;margin-left:9px}.stage-timer{color:var(--mint)!important;min-width:70px;display:inline-block;text-align:right}.canvas-wrap{position:relative;flex:1;min-height:0}#aimCanvas{display:block;width:100%;height:100%;cursor:crosshair;touch-action:none}.stage-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#071018d4;backdrop-filter:blur(5px);padding:25px}.stage-overlay[hidden]{display:none}.overlay-box{text-align:center;max-width:570px}.overlay-box h2{font-size:29px}.overlay-box p{color:#99b1c2;font-size:13px;margin:15px auto 24px}.overlay-box .count{font:110px var(--mono);color:var(--mint);line-height:1.1}.overlay-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}.stage-bottom{display:flex;justify-content:space-between;gap:18px;background:#101b26;border-top:1px solid var(--line);padding:13px 30px;color:#7d98aa;font-size:11px}.stage-line{height:3px;background:#233748;position:relative}.stage-line i{display:block;background:var(--mint);height:100%;width:100%}.calib-readout{font:50px var(--mono);color:var(--mint);margin:18px}.toast{position:fixed;bottom:25px;left:50%;transform:translateX(-50%);padding:13px 22px;max-width:90vw;z-index:100;background:#d8f7eb;color:#142a25;box-shadow:0 5px 50px #0007;font-size:12px}.toast[hidden]{display:none}.noscript{padding:30px;color:#fff;background:#943343}
+@media(min-width:1600px){.main{padding-left:60px;padding-right:60px}.hero{min-height:250px}.hero-copy{padding:35px}.hero-art{min-height:250px}.page-head{padding-top:45px;padding-bottom:35px}.content-grid{gap:28px}.panel-body{padding:28px}.field-grid{gap:25px}}
+@media(max-width:1100px){.app{grid-template-columns:175px 1fr}.sidebar{padding:28px 12px 16px}.brand{gap:8px;margin-left:3px}.brand strong{font-size:15px}.brand small{font-size:7px}.main{padding:0 25px 25px}.content-grid{grid-template-columns:1fr}.hero-copy{padding:25px}.hero h2{font-size:22px}.hero{grid-template-columns:1.2fr 1fr}.protocol{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.protocol-item{grid-template-columns:30px 1fr;border-bottom:0}.task-meta{display:none}.calib-grid{grid-template-columns:1fr}.head-code{display:none}.report-main{grid-template-columns:1fr 1fr}.result-card{padding:24px}.result-metrics{gap:20px}.big-value{font-size:65px}.stage-stats{gap:14px}}
+@media(max-width:720px){.app{display:block}.sidebar{position:relative;width:100%;height:auto;padding:18px 18px 0;border:0;border-bottom:1px solid var(--line)}.brand{margin:0 0 17px}.brand small{font-size:9px}.nav-label,.sidebar-bottom{display:none}.nav{display:flex;gap:5px}.nav button{padding:12px 8px;justify-content:center;font-size:11px;border-left:0;border-bottom:2px solid transparent;gap:7px}.nav button.active{border-bottom-color:var(--red)}.main{padding:0 18px 22px}.topbar{height:55px}.top-status{font-size:8px}.page-head{padding:27px 0 23px}h1{font-size:32px;letter-spacing:-1px}.hero{grid-template-columns:1fr;min-height:0}.hero-art{display:none}.hero-copy{padding:23px}.field-grid{gap:18px 13px}.panel-body{padding:20px}.panel-head{padding:17px 20px}.protocol{display:block;padding:0 20px}.protocol-item{grid-template-columns:35px 1fr auto;border-bottom:1px solid var(--line)}.task-meta{display:block}.form-footer{flex-direction:column;align-items:stretch}.form-footer small{text-align:center}.suite-top{gap:8px}.metric-card{padding:13px}.metric-card strong{font-size:21px}.metric-card span{font-size:9px}.report-main{grid-template-columns:1fr}.rounds{gap:7px}.round{padding:10px;font-size:10px}.footer{font-size:9px;gap:15px}.footer span:last-child{display:none}.stage-top{height:75px;padding:0 15px}.stage-title{font-size:12px}.stage-stats{gap:10px}.stage-stats b{font-size:20px;margin-left:4px}.stage-stats .stage-score{display:none}.stage-bottom{padding:12px 15px;font-size:10px}.stage-bottom span:last-child{display:none}.stage-top .btn{padding:8px 11px;min-height:36px;font-size:11px}.overlay-box h2{font-size:23px}.overlay-box p{font-size:12px}.calib-readout{font-size:35px}}
+</style>
+</head>
+<body>
+<noscript><div class="noscript">请启用浏览器 JavaScript 后使用测试。此 HTML 无需网络。</div></noscript>
+<div class="app">
+<aside class="sidebar">
+ <div class="brand"><div class="brand-mark" aria-hidden="true"></div><div><strong>准度档案</strong><small>PERSONAL SENS LAB</small></div></div>
+ <div class="nav-label">YOUR AIM, DECODED</div>
+ <nav class="nav" aria-label="测评步骤">
+  <button data-view="profile" class="active"><span>01</span><span>个人档案</span></button>
+  <button data-view="calibration"><span>02</span><span>输入校准</span></button>
+  <button data-view="testing"><span>03</span><span>实战测评</span></button>
+  <button data-view="report"><span>04</span><span>灵敏度报告</span></button>
+ </nav>
+ <div class="sidebar-bottom"><div class="local-note"><strong><i class="dot"></i> &nbsp; 本地运行 · 离线可用</strong>档案与报告仅保存在此浏览器。<br>不需要账号，也不上传鼠标数据。</div><div class="sidebar-foot">INDEPENDENT TOOL / V1.0<br>DESIGNED FOR VALORANT</div></div>
+</aside>
+<main class="main">
+ <header class="topbar"><div class="breadcrumb">无畏契约 <span style="color:#435767"> / </span><b id="breadcrumb">个人灵敏度实验室</b></div><div class="top-status"><i class="dot"></i> OFFLINE READY <span style="color:#3f5566">|</span> <span>HTML EDITION</span></div></header>
+ <section id="view-profile" class="view">
+  <div class="page-head"><div><div class="eyebrow">BUILT AROUND THE WAY YOU AIM</div><h1>把手感，变成数据<span class="red">。</span></h1><p>从你的习惯出发，找到更适合自己的无畏契约灵敏度。</p></div><div class="head-code">VALORANT / SENSITIVITY<br>01 — PROFILE SETUP</div></div>
+  <div class="hero"><div class="hero-copy"><span class="tag"><i class="dot"></i> 内嵌 AIM LAB 风格训练</span><h2>移动、碰触、命中。</h2><p>无需点击开火。用甩枪、微调与跟枪对比三档灵敏度，让每一次鼠标移动参与推荐。</p><div class="hero-pills"><span>⌖ 常驻准星</span><span>◷ 实时倒计时</span><span>↗ 游戏数值输出</span></div></div><div class="hero-art" aria-hidden="true"><div class="art-line"></div><svg viewBox="0 0 500 240" preserveAspectRatio="xMidYMid slice"><defs><pattern id="grid" width="34" height="34" patternUnits="userSpaceOnUse"><path d="M34 0H0V34" fill="none" stroke="#48636d" stroke-width=".5" opacity=".4"/></pattern><radialGradient id="target"><stop stop-color="#ff5966" stop-opacity=".4"/><stop offset="1" stop-color="#ff5966" stop-opacity="0"/></radialGradient></defs><path d="M-70 240L140 153H380L600 240M140 153V-20M380 153V-20M140 153L-50 20M380 153L580 20" stroke="#365260" fill="none"/><path d="M140 153H380V0H140Z" fill="url(#grid)"/><path d="M-70 240H600M-20 216H550M40 190H490M90 171H430M260 153V240M200 153L140 240M320 153L380 240" stroke="#294450" fill="none"/><path d="M164 120Q245 174 340 73" stroke="#95f4d4" stroke-dasharray="3 6" fill="none" opacity=".6"/><circle cx="340" cy="73" r="46" fill="url(#target)"/><circle cx="340" cy="73" r="18" stroke="#ff5966" fill="#ff596612"/><circle cx="340" cy="73" r="11" fill="#ff5966"/><circle cx="164" cy="120" r="12" stroke="#657f8a" fill="#162b37"/><circle cx="245" cy="174" r="6" stroke="#95f4d4" fill="#95f4d415"/><path d="M336 43H344M370 69V77M336 103H344M310 69V77" stroke="#ff5966"/></svg><div class="cross-art"></div><span class="art-caption">ACQUIRE. ADJUST. TRACK.</span></div></div>
+  <div class="content-grid">
+   <section class="panel"><div class="panel-head"><h3><span class="panel-num">01 /</span> 建立你的输入档案</h3><span class="mini-label">PROFILE</span></div><div class="panel-body">
+    <form id="profileForm" novalidate>
+     <div class="field-grid">
+      <div class="field"><label for="dpi">鼠标 DPI <span>必填</span></label><div class="input-wrap"><input id="dpi" name="dpi" type="number" min="100" max="40000" step="1" value="800" inputmode="numeric"><span class="unit">DPI</span></div><small>填写鼠标驱动里的实际 DPI，网页无法自动读取。</small></div>
+      <div class="field"><label for="currentSens">当前游戏灵敏度 <span>必填</span></label><input id="currentSens" name="currentSens" type="number" min="0.001" max="10" step="0.001" value="0.350" inputmode="decimal"><small>无畏契约 → 设置 → 通用 → 鼠标 → 灵敏度：瞄准。</small></div>
+      <div class="field"><label for="padWidth">鼠标可用横向空间</label><div class="input-wrap"><input id="padWidth" name="padWidth" type="number" min="10" max="150" value="40" inputmode="decimal"><span class="unit">CM</span></div><small>填写鼠标实际能移动的宽度，扣除键盘占位。</small></div>
+      <div class="field"><label for="currentIssue">你最常遇到的情况</label><select id="currentIssue" name="currentIssue"><option value="inconsistent">时快时慢，手感不稳定</option><option value="overshoot">拉过头，需要往回修正</option><option value="undershoot">拉不到位，需要补一段</option><option value="comfortable">当前舒适，想再验证</option></select></div>
+      <div class="field field-full"><label>主要发力习惯</label><div class="choice-group" data-choice="style"><button type="button" class="choice" data-value="wrist" aria-pressed="false">手腕为主</button><button type="button" class="choice selected" data-value="mixed" aria-pressed="true">手腕＋手臂</button><button type="button" class="choice" data-value="arm" aria-pressed="false">手臂为主</button></div></div>
+      <div class="field"><label for="priority">最看重的瞄准表现</label><select id="priority" name="priority"><option value="balanced">均衡：微调与转移兼顾</option><option value="precision">精度：架点、点头与微调</option><option value="speed">速度：转移、突破与拉枪</option></select></div>
+      <div class="field"><label for="duration">单项测试时长</label><select id="duration" name="duration"><option value="12">12 秒 · 快速测评（9 轮）</option><option value="20">20 秒 · 更多样本（9 轮）</option></select></div>
+     </div>
+     <div id="profileError" class="form-error" role="alert"></div>
+     <div class="form-footer"><small class="muted">默认数值仅为示例，请改成自己的设置。</small><button class="btn btn-primary" type="submit">保存档案，校准输入 <span>→</span></button></div>
+    </form>
+   </div></section>
+   <div><section class="panel"><div class="panel-head"><h3>三种能力，一个答案</h3><span class="mini-label">TEST PROTOCOL</span></div><div class="protocol">
+    <div class="protocol-item"><span class="task-icon">⌖</span><div><h3>目标转移 · 甩枪</h3><p>大角度移动到新目标，衡量获取速度与路径效率。</p></div><span class="task-meta">FLICK</span></div>
+    <div class="protocol-item"><span class="task-icon">⊹</span><div><h3>精准修正 · 微调</h3><p>小目标、短距离，寻找细微移动的控制感。</p></div><span class="task-meta">MICRO</span></div>
+    <div class="protocol-item"><span class="task-icon">∿</span><div><h3>持续控制 · 跟枪</h3><p>跟随移动目标，记录停留比例与角度误差。</p></div><span class="task-meta">TRACK</span></div>
+   </div></section><div class="info-box"><b>测试表现决定推荐</b><br>三档灵敏度完成同样的三项任务，测试中隐藏档位，减少预期影响。最终输出实测档位，不凭感觉编造数值。</div><div class="stats-strip"><div><strong>03</strong><span>候选灵敏度</span></div><div><strong>09</strong><span>交叉对比测试</span></div><div><strong>0.001</strong><span>输出小数步长</span></div></div></div>
+  </div>
+ </section>
+ <section id="view-calibration" class="view" hidden>
+  <div class="page-head"><div><div class="eyebrow">MATCH YOUR INPUT</div><h1>先让输入，对上手感<span class="red">。</span></h1><p>测试使用鼠标锁定与相对位移，模拟游戏中的视角旋转。</p></div><span class="tag">02 / CALIBRATION</span></div>
+  <div class="calib-grid"><section class="panel"><div class="panel-head"><h3>测试前的 3 件事</h3><span class="mini-label">PRE-FLIGHT</span></div><div class="panel-body"><ol class="numbered"><li><b>保持 DPI 与游戏一致。</b><br>关闭鼠标驱动中的动态 DPI、角度修正与额外加速；测试中不要切换 DPI。</li><li><b>使用桌面版 Chrome 或 Edge。</b><br>开始时网页会锁定鼠标并请求原始位移。按 <span class="key">Esc</span> 退出锁定，测试会暂停。</li><li><b>碰到目标即命中，不需要点击。</b><br>准星固定在屏幕中心，移动鼠标转动视角。跟枪时让准星持续留在目标上。</li></ol><div class="calib-status" id="profileSummary">请先保存个人档案。</div><div class="suite-actions"><button id="warmupBtn" class="btn btn-secondary">8 秒练习 / 检测输入</button><button id="toTestBtn" class="btn btn-primary">进入正式测评 →</button></div><div class="info-box warning"><b>当前游戏的原始输入</b><br>Riot 在 11.06 版本移除了 Raw Input Buffer 开关，并将其设为始终启用。网页会尽量请求原始鼠标数据，但无法保证浏览器与游戏的输入链完全一致。</div></div></section>
+   <section class="panel"><div class="panel-head"><h3>可选：10 cm 位移校验</h3><span class="mini-label">INPUT CHECK</span></div><div class="panel-body"><p class="explanation">准备一把尺子，将鼠标放在起点。开始后，水平向右直线移动 <b class="mint">10 cm</b>，再按 <span class="key">Enter</span> 完成。避免抬鼠或来回移动。</p><div class="equation">期望原始计数 = DPI × 10 ÷ 2.54</div><p class="muted" style="font-size:11px;margin-bottom:20px">原始输入下仅校验 DPI；普通锁定下会估算位移校正系数。鼠标加速随速度变化时，单次校准不能彻底消除误差。</p><button id="calibrateBtn" class="btn btn-ghost btn-wide">开始 10 cm 校验 ↗</button><div id="calibrationResult" class="info-box" aria-live="polite">尚未校验。支持原始输入时可直接开始测试。</div><button id="resetCalibrationBtn" class="btn btn-ghost" style="margin-top:12px;padding:7px 12px;min-height:33px">重置位移校正</button></div></section></div>
+ </section>
+ <section id="view-testing" class="view" hidden>
+  <div class="page-head"><div><div class="eyebrow">LESS GUESSING. MORE EVIDENCE.</div><h1>让每一档，都经得起测试<span class="red">。</span></h1><p>同样的目标序列，交错的测试顺序。每轮结束后休息，再开始下一轮。</p></div><span class="tag">03 / MEASUREMENT</span></div>
+  <div class="suite-top"><div class="metric-card"><span>已完成测试</span><strong id="roundCount">0 <span>/ 9</span></strong></div><div class="metric-card"><span>单轮有效时长</span><strong id="roundDuration">12 <span>SEC</span></strong></div><div class="metric-card"><span>输入状态</span><strong id="inputStatus" style="font-size:17px;margin-top:6px">等待检测</strong></div></div>
+  <div class="content-grid"><section class="panel"><div class="panel-head"><h3 id="nextRoundTitle">准备开始</h3><span class="mini-label" id="suiteLabel">3 SENS × 3 TASKS</span></div><div class="panel-body"><p class="explanation" id="nextRoundHint">保存个人档案后即可开始。每一轮只需移动鼠标，不需要点击目标。</p><div class="rounds" id="roundGrid"></div><div class="progress-track"><div class="progress-fill" id="suiteProgress" style="width:0"></div></div><div class="suite-actions" style="margin-top:24px"><button id="startRoundBtn" class="btn btn-primary">开始第 1 轮 →</button><button id="restartSuiteBtn" class="btn btn-ghost">重新测评</button></div><p id="lastRound" class="muted" style="font-size:11px;margin-top:17px" aria-live="polite"></p></div></section><section class="panel"><div class="panel-head"><h3>怎样让结果更可靠</h3><span class="mini-label">CONSISTENCY</span></div><div class="panel-body"><ol class="numbered"><li>保持同一坐姿、鼠标握法和桌面空间。</li><li>每轮尽力保持快速且稳定，不要为了某个档位刻意放慢。</li><li>切换标签页、失去焦点或退出锁定都会暂停；恢复后继续计时。</li><li>先完成全部 9 轮。表现接近时优先保持当前灵敏度，再到游戏靶场验证。</li></ol><div class="info-box">计时取自单调时钟的实际时间差，并扣除暂停时间；显示与测试共用同一计时源。</div></div></section></div>
+ </section>
+ <section id="view-report" class="view" hidden>
+  <div class="page-head"><div><div class="eyebrow">YOUR PERSONAL SENS PROFILE</div><h1>给手感，一个可用的数值<span class="red">。</span></h1><p>推荐来自本次测试过的档位，可直接填入游戏的「灵敏度：瞄准」。</p></div><span class="tag">04 / RESULTS</span></div>
+  <div id="reportContent"><div class="panel empty"><h2>完成测评后，答案会在这里。</h2><p>你需要用三档灵敏度各完成甩枪、微调和跟枪测试。我们不会在数据不足时生成个人推荐。</p><button class="btn btn-primary" data-goto="testing">前往测评 →</button></div></div>
+  <div id="historyWrap" style="margin-top:23px"><span class="mini-label">LOCAL HISTORY / 最近 8 次报告</span><div id="historyList" class="history"></div></div>
+ </section>
+ <details><summary>计算依据、游戏应用方法与测评边界</summary><p>这是独立制作的 Aim Lab 风格训练工具，并非 Riot Games 或 Aim Lab 官方产品，未嵌入其客户端。网页不能读取游戏配置、鼠标驱动 DPI 或替你修改游戏。</p><p>网页采用常用训练器匹配参数 0.07°/count × 灵敏度计算相机转动，16:9 使用 103°水平视场角。0.07 来自下方 KovaaK 开发者的匹配说明，并非 Riot 对本工具的精度保证；这些参数用于模拟与 cm/360 估算。</p><p class="mono">eDPI = DPI × 灵敏度<br>cm/360 ≈ 914.4 ÷ (DPI × 灵敏度 × 0.07)</p><p>输出保留三位小数；本工具将候选限制在 0.001–10.000，这是工具的工作范围，不声称是游戏完整输入范围。普通锁定或光标备用模式会受系统与浏览器影响。网页成绩只能提供本次相对证据，不能保证唯一最优；交付前未在你的游戏客户端中实测。</p><p>应用：保持相同 DPI → 游戏设置 → 通用 → 鼠标 → 灵敏度：瞄准，输入报告中的小数 → 在靶场验证转身与微调。ADS / 狙击镜倍率属于独立选项，本测评不据此生成倍率建议。</p><p>资料核查：2026-11-03；Riot 官方索引最新为 13.09（2026-10-27），该补丁未说明灵敏度比例变化。<a href="https://playvalorant.com/en-us/news/game-updates/valorant-patch-notes-1309/" target="_blank" rel="noopener">Riot 13.09 更新</a> · <a href="https://playvalorant.com/en-us/news/game-updates/valorant-patch-notes-11-06/" target="_blank" rel="noopener">Riot 11.06：原始输入始终启用</a> · <a href="https://www.reddit.com/r/FPSAimTrainer/comments/gg4iu1/2010_patch_notes/" target="_blank" rel="noopener">KovaaK 开发者补丁：0.07 匹配参数</a> · <a href="https://aimlabs.com/articles/aimlabs/how-to-configure-and-convert-your-sensitivity-in-aimlabs/" target="_blank" rel="noopener">Aimlabs 2026 官方教程：游戏配置、DPI 与位移核验</a>。请以安装的游戏客户端最终接受与保留的值为准。</p></details>
+ <footer class="footer"><span>为个人手感而做。用数据缩小范围，用实战确认选择。</span><span>LOCAL FIRST · NO ACCOUNT · NO UPLOAD</span></footer>
+</main></div>
+<div id="stage" class="stage" hidden role="dialog" aria-modal="true" aria-label="鼠标瞄准测试">
+ <div class="stage-top"><div class="stage-title" id="stageTitle">目标转移<small>TOUCH TO HIT / NO CLICK</small></div><div class="stage-stats"><span class="stage-score">命中 <b id="stageHits">0</b></span><span>剩余 <b id="stageTime" class="stage-timer">12.0</b></span><button class="btn btn-ghost" id="exitStageBtn">退出测试</button></div></div>
+ <div class="stage-line"><i id="stageProgress"></i></div>
+ <div class="canvas-wrap"><canvas id="aimCanvas" aria-label="瞄准区域，移动鼠标转动视角，中心准星碰到目标自动命中"></canvas><div class="stage-overlay" id="stageOverlay"><div class="overlay-box" id="overlayContent"></div></div></div>
+ <div class="stage-bottom"><span id="stageInputLabel">正在检测输入…</span><span><span class="key">Esc</span> 暂停 / 释放鼠标　 ·　准星触碰自动命中</span></div>
+</div>
+<div id="toast" class="toast" role="status" hidden></div>
+<script>
+/* Local-only sensitivity comparison model. No network or game integration. */
+(function (root) {
+  'use strict';
+  const MIN_SENS = 0.001;
+  const MAX_SENS = 10;
+  const TASKS = ['flick', 'micro', 'track'];
+  const TASK_NAMES = { flick: '甩枪', micro: '微调', track: '跟枪' };
+  const WEIGHTS = Object.freeze({
+    precision: Object.freeze({ flick: 0.30, micro: 0.50, track: 0.20 }),
+    balanced: Object.freeze({ flick: 0.40, micro: 0.35, track: 0.25 }),
+    speed: Object.freeze({ flick: 0.55, micro: 0.20, track: 0.25 })
+  });
+  const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
+  const roundSens = n => Math.round(clamp(n, MIN_SENS, MAX_SENS) * 1000) / 1000;
+  const round = (n, digits = 1) => Number(n.toFixed(digits));
+  const number = value => (value === '' || value === null || value === undefined || typeof value === 'boolean') ? NaN : Number(value);
+  const finite = value => typeof value === 'number' && Number.isFinite(value);
+  const edpi = (dpi, sensitivity) => Number(dpi) * Number(sensitivity);
+  const cm360 = (dpi, sensitivity) => edpi(dpi, sensitivity) > 0 ? 2.54 * 360 / (edpi(dpi, sensitivity) * 0.07) : NaN;
+
+  function validateProfile(input) {
+    const p = input || {};
+    const profile = {
+      dpi: number(p.dpi), currentSens: number(p.currentSens), padWidth: number(p.padWidth),
+      style: p.style, priority: p.priority, currentIssue: p.currentIssue,
+      duration: p.duration === undefined ? 12 : number(p.duration)
+    };
+    const errors = [];
+    if (!Number.isInteger(profile.dpi) || profile.dpi < 100 || profile.dpi > 40000) errors.push('请输入鼠标驱动里实际使用的 DPI（100–40000 的整数）。');
+    if (!finite(profile.currentSens) || profile.currentSens < MIN_SENS || profile.currentSens > MAX_SENS) errors.push('请输入当前游戏灵敏度（本工具支持 0.001–10）。');
+    if (!finite(profile.padWidth) || profile.padWidth < 10 || profile.padWidth > 150) errors.push('请输入可用鼠标横向移动宽度（10–150 厘米）。');
+    if (!['wrist', 'mixed', 'arm'].includes(profile.style)) errors.push('请选择主要瞄准方式。');
+    if (!Object.prototype.hasOwnProperty.call(WEIGHTS, profile.priority)) errors.push('请选择测试侧重点。');
+    if (!['overshoot', 'undershoot', 'inconsistent', 'comfortable'].includes(profile.currentIssue)) errors.push('请选择当前瞄准感受。');
+    if (![12, 20].includes(profile.duration)) errors.push('请选择 12 秒或 20 秒的单项测试时长。');
+    return { valid: errors.length === 0, errors, profile };
+  }
+
+  function makeCandidates(input) {
+    const checked = validateProfile(input);
+    if (!checked.valid) return { valid: false, candidates: [], errors: checked.errors, warnings: [] };
+    const p = checked.profile;
+    const current = roundSens(p.currentSens);
+    let down = p.currentIssue === 'overshoot' ? 0.24 : 0.18;
+    let up = p.currentIssue === 'undershoot' ? 0.24 : 0.18;
+    if (p.style === 'arm') down += 0.02;
+    if (p.style === 'wrist') up += 0.02;
+    if (p.priority === 'precision') down += 0.02;
+    if (p.priority === 'speed') up += 0.02;
+    const warnings = [];
+    // A turn requiring more width than available is a physical constraint, not a performance diagnosis.
+    const halfTurn = cm360(p.dpi, current) / 2;
+    if (halfTurn > p.padWidth * 0.85) {
+      up = Math.min(0.28, up + 0.02);
+      warnings.push('当前灵敏度的理论 180° 移动距离接近或超过可用宽度；较高档已略扩大。请在游戏中检查转身与抬鼠习惯。');
+    }
+    let values = [roundSens(Math.min(current - 0.001, current * (1 - down))), current, roundSens(Math.max(current + 0.001, current * (1 + up)))];
+    values = Array.from(new Set(values));
+    if (values.length < 3) {
+      if (current <= MIN_SENS + 0.000001) values = [MIN_SENS, 0.002, 0.003];
+      else if (current >= MAX_SENS - 0.000001) values = [roundSens(current * (1 - down)), roundSens(current * (1 - down / 2)), current];
+      else {
+        const next = current + 0.001 <= MAX_SENS && !values.includes(roundSens(current + 0.001)) ? roundSens(current + 0.001) : roundSens(current - 0.001);
+        values.push(next);
+      }
+      warnings.push('当前数值靠近工具比较范围边缘，三档向可用的一侧展开；当前档会单独标注。');
+    }
+    values.sort((a, b) => a - b);
+    const candidates = values.map((sensitivity, index) => ({
+      id: ['low', 'base', 'high'][index], sensitivity,
+      label: Math.abs(sensitivity - current) < 0.000001 ? '当前档' : ['较低档', '中间档', '较高档'][index],
+      isCurrent: Math.abs(sensitivity - current) < 0.000001,
+      edpi: edpi(p.dpi, sensitivity), cm360: cm360(p.dpi, sensitivity),
+      changePct: round((sensitivity / p.currentSens - 1) * 100, 1)
+    }));
+    if (Math.abs(current - p.currentSens) > 0.0000001) warnings.push('候选统一保留三位小数；当前值已按相同精度取整，以便直接输入游戏。');
+    return { valid: true, candidates, warnings, errors: [], spread: { down, up }, currentCandidateId: candidates.find(c => c.isCurrent).id };
+  }
+
+  function incomplete(errors, extra) {
+    return Object.assign({ completed: false, recommended: null, ranked: [], alternatives: [], confidence: 'insufficient', confidenceLabel: '数据不足', reasons: [], errors }, extra || {});
+  }
+
+  function analyze(input, candidates, runs) {
+    const checked = validateProfile(input);
+    if (!checked.valid) return incomplete(checked.errors);
+    const p = checked.profile;
+    if (!Array.isArray(candidates) || candidates.length !== 3 || new Set(candidates.map(c => c.id)).size !== 3 || new Set(candidates.map(c => c.sensitivity)).size !== 3 || candidates.some(c => !finite(c.sensitivity) || c.sensitivity < MIN_SENS || c.sensitivity > MAX_SENS || Math.abs(roundSens(c.sensitivity) - c.sensitivity) > 0.000001)) {
+      return incomplete(['需要三个互不重复、可输入游戏的有效候选灵敏度。']);
+    }
+    if (!Array.isArray(runs)) return incomplete(['请完成全部九轮测试。']);
+    const expected = candidates.flatMap(c => TASKS.map(task => c.id + ':' + task));
+    const accepted = new Map();
+    const errors = [];
+    for (const run of runs) {
+      const key = run.candidateId + ':' + run.task;
+      if (!expected.includes(key)) { errors.push('发现不属于本次三档测试的数据，请重新测试。'); continue; }
+      if (accepted.has(key)) { errors.push('同一候选的同一项目出现重复数据，请替换旧轮次后分析。'); continue; }
+      if (!finite(run.score) || run.score < 0 || !finite(run.duration) || run.duration <= 0 || (run.sensitivity !== undefined && Math.abs(run.sensitivity - candidates.find(c => c.id === run.candidateId).sensitivity) > 0.000001)) {
+        errors.push('发现无效分数、时长或灵敏度不匹配的数据，请重测该轮。'); continue;
+      }
+      if (run.duration < p.duration - 0.25) { errors.push('某轮测试尚未达到所选时长，请完成整轮后分析。'); continue; }
+      accepted.set(key, run);
+    }
+    const missing = expected.filter(key => !accepted.has(key));
+    if (errors.length || missing.length || runs.length !== 9) return incomplete(Array.from(new Set(errors.concat(missing.length ? ['请完成三档灵敏度各自的甩枪、微调和跟枪测试。'] : []))), { missing, completedCount: accepted.size, totalCount: 9 });
+
+    const weights = Object.assign({}, WEIGHTS[p.priority]);
+    const maxima = Object.fromEntries(TASKS.map(task => [task, Math.max(...candidates.map(c => accepted.get(c.id + ':' + task).score))]));
+    const rows = candidates.map(candidate => {
+      const taskScores = {};
+      const metrics = {};
+      let measuredScore = 0;
+      for (const task of TASKS) {
+        const run = accepted.get(candidate.id + ':' + task);
+        const relativeScore = maxima[task] > 0 ? run.score / maxima[task] * 100 : 0;
+        taskScores[task] = round(relativeScore, 2);
+        measuredScore += weights[task] * relativeScore;
+        metrics[task] = Object.assign({}, run);
+      }
+      // Habit priors are deliberately tiny: total possible effect is below one point.
+      const direction = Math.sign(candidate.sensitivity - p.currentSens);
+      let prior = 0;
+      if (p.currentIssue === 'overshoot') prior -= direction * 0.25;
+      if (p.currentIssue === 'undershoot') prior += direction * 0.25;
+      if (p.style === 'arm') prior -= direction * 0.10;
+      if (p.style === 'wrist') prior += direction * 0.10;
+      return {
+        id: candidate.id, candidate: Object.assign({}, candidate), sensitivity: candidate.sensitivity,
+        label: candidate.label, isCurrent: !!candidate.isCurrent,
+        score: round(measuredScore, 2), measuredScore: round(measuredScore, 2),
+        habitPrior: round(prior, 2), selectionScore: measuredScore + prior,
+        taskScores, metrics, edpi: edpi(p.dpi, candidate.sensitivity), cm360: cm360(p.dpi, candidate.sensitivity)
+      };
+    });
+    rows.sort((a, b) => b.selectionScore - a.selectionScore || Math.abs(a.sensitivity - p.currentSens) - Math.abs(b.sensitivity - p.currentSens));
+    const top = rows[0];
+    const near = rows.filter(row => top.selectionScore - row.selectionScore <= 2);
+    const current = near.find(row => row.isCurrent);
+    // A single short run cannot establish that a 1–2 point difference is meaningful.
+    const recommended = current || top;
+    const gap = rows[0].selectionScore - rows[1].selectionScore;
+    const warnings = [];
+    const allRuns = Array.from(accepted.values());
+    const cursorInput = allRuns.some(run => run.inputMode === 'cursor');
+    const adjustedInput = allRuns.some(run => run.raw === false);
+    const unknownInput = allRuns.some(run => run.raw === undefined);
+    const smallSamples = allRuns.filter(run => run.task !== 'track' && (!finite(run.hits) || run.hits < 5));
+    const noActivity = allRuns.filter(run => (run.task === 'track' ? run.score <= 0 : (run.hits || 0) <= 0));
+    const unstableFrames = allRuns.filter(run => finite(run.fps) && run.fps < 40);
+    const sparseTrackSamples = allRuns.filter(run => run.task === 'track' && finite(run.measuredSeconds) && run.measuredSeconds < run.duration * 0.75);
+    const noMouseMovement = allRuns.every(run => finite(run.movementCount) && run.movementCount <= 0);
+    const inconsistentInput = new Set(allRuns.map(run => (run.inputMode || 'unknown') + ':' + String(run.raw))).size > 1;
+    if (noMouseMovement) return incomplete(['九轮未记录到鼠标移动，无法生成个人推荐；请确认鼠标已锁定并能移动视角后重新测试。'], { completedCount: 9, totalCount: 9, ranked: rows, quality: { noMouseMovement: true } });
+    if (noActivity.length === 9) return incomplete(['九轮都未记录到有效命中或跟枪得分，无法据此推荐个人灵敏度；请确认鼠标输入正常后重新测试。'], { completedCount: 9, totalCount: 9, ranked: rows, quality: { zeroActivityRuns: 9 } });
+    if (cursorInput) warnings.push('包含普通指针模式数据：浏览器位移与游戏原始输入未建立一一对应，结果仅能作为方向参考；建议用锁定鼠标模式复测。');
+    else if (adjustedInput) warnings.push('浏览器未启用无加速原始位移；系统加速可能改变匹配关系。推荐值仍可输入游戏，手感需在靶场验证。');
+    else if (unknownInput) warnings.push('未记录原始输入状态，无法确认浏览器和游戏的位移一致性。');
+    if (inconsistentInput) warnings.push('九轮的输入模式不同，候选之间的比较受影响，建议统一模式复测。');
+    if (smallSamples.length) warnings.push('部分甩枪或微调轮次不足五次命中，样本较少，建议选择 20 秒并复测。');
+    if (noActivity.length) warnings.push('存在零命中或零跟枪得分的轮次，结果可能未反映正常操作。');
+    if (unstableFrames.length) warnings.push('部分轮次记录到较低平均帧率；此信息只作提示，未直接扣分。');
+    if (sparseTrackSamples.length) warnings.push('部分跟枪轮次的有效采样不足所选时长的 75%，可能有明显卡顿；建议关闭其他高负载应用后复测。');
+    if (gap <= 2) warnings.push('领先差距小于或等于 2 分；单次短测不足以证明优劣，优先保留接近当前的档位。');
+    const lowConfidence = cursorInput || adjustedInput || unknownInput || inconsistentInput || smallSamples.length > 0 || noActivity.length > 0 || sparseTrackSamples.length > 0 || gap < 3;
+    const confidence = lowConfidence ? 'low' : 'moderate';
+    const confidenceLabel = lowConfidence ? '建议复测' : '相对表现有优势';
+    const reasons = [
+      '三项先按各项目最高分归一化，再加权：甩枪 ' + Math.round(weights.flick * 100) + '%、微调 ' + Math.round(weights.micro * 100) + '%、跟枪 ' + Math.round(weights.track * 100) + '%。',
+      '推荐来自实际测试过的三位小数档位；个人习惯仅提供至多 ±0.35 分的微小先验，不替代测试表现。',
+      recommended.id === top.id ? '该档在本次比较中的加权表现领先或持平。' : '当前档距领先档不超过 2 分，按保守规则保留当前档，避免因短测噪声频繁调整。',
+      '这是单人、短时、浏览器内的启发式相对比较，未建立统计置信区间，也不能证明存在唯一最优灵敏度。'
+    ];
+    const changePct = round((recommended.sensitivity / p.currentSens - 1) * 100, 1);
+    const alternatives = rows.filter(row => row.id !== recommended.id).map(row => ({ id: row.id, sensitivity: row.sensitivity, score: row.score, changePct: round((row.sensitivity / recommended.sensitivity - 1) * 100, 1), label: row.label }));
+    return {
+      completed: true, completedCount: 9, totalCount: 9, recommended, highestScoring: top, ranked: rows,
+      confidence, confidenceLabel, confidenceExplanation: '该标记仅描述本次相对证据的强弱，并非统计置信度。',
+      reasons, warnings, errors: [], changePct, alternatives, weights,
+      tieThreshold: 2, topGap: round(gap, 2), quality: { cursorInput, adjustedInput, unknownInput, inconsistentInput, smallSampleRuns: smallSamples.length, zeroActivityRuns: noActivity.length, lowFpsRuns: unstableFrames.length, sparseTrackSampleRuns: sparseTrackSamples.length, noMouseMovement },
+      formula: 'eDPI = DPI × 游戏灵敏度；cm/360 = 2.54 × 360 ÷ (DPI × 灵敏度 × 0.07)。0.07 是社区通用换算系数，并非 Riot 公开的精度保证。'
+    };
+  }
+
+  root.SensModel = Object.freeze({ validateProfile, makeCandidates, analyze, edpi, cm360, roundSens, weights: WEIGHTS, tasks: TASKS.slice(), taskNames: Object.assign({}, TASK_NAMES), supportedRange: Object.freeze({ min: MIN_SENS, max: MAX_SENS, decimals: 3 }) });
+})(typeof window !== 'undefined' ? window : globalThis);
+
+;
+/* Standalone canvas trainer. Parent binds pointer events to handleMovement(dx, dy).
+ * start({task,sensitivity,duration,seed,inputMode,pixelScale}) starts immediately.
+ * onTick receives {remaining,elapsed,hits,trackingRatio,score,task,state}.
+ * onState receives {state,reason}; onEnd receives one immutable result object.
+ * Values are browser movement units; only unadjusted pointer lock approximates
+ * mouse counts. The parent must describe fallback / calibrated input accurately.
+ */
+(function (global) {
+  'use strict';
+  const RAD = Math.PI / 180;
+  const DEG = 180 / Math.PI;
+  const YAW = 0.07;
+  const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+  const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+  const cross = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
+  const norm = a => Math.hypot(a[0], a[1], a[2]);
+  const unit = a => { const n = norm(a); return n > 1e-12 ? a.map(x => x / n) : [0, 0, 1]; };
+  const direction = (yaw, pitch) => [Math.sin(yaw) * Math.cos(pitch), Math.sin(pitch), Math.cos(yaw) * Math.cos(pitch)];
+  const angle = (a, b) => Math.acos(clamp(dot(a, b), -1, 1));
+  const finite = (v, fallback = 0) => Number.isFinite(v) ? v : fallback;
+  function randomSource(seed) {
+    let a = seed >>> 0;
+    return () => { a += 0x6D2B79F5; let t = a; t = Math.imul(t ^ t >>> 15, t | 1); t ^= t + Math.imul(t ^ t >>> 7, t | 61); return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+  }
+  // Shortest distance from a point on the unit sphere to the minor arc a -> b.
+  function segmentDistance(a, b, target) {
+    const arc = angle(a, b);
+    if (arc < 1e-7 || arc > Math.PI - 0.001) return Math.min(angle(a, target), angle(b, target));
+    const normal = unit(cross(a, b));
+    const d = dot(target, normal);
+    const projected = unit(target.map((x, i) => x - d * normal[i]));
+    if (angle(a, projected) + angle(projected, b) <= arc + 1e-5) return Math.asin(clamp(Math.abs(d), 0, 1));
+    return Math.min(angle(a, target), angle(b, target));
+  }
+  class AimEngine {
+    constructor(canvas, callbacks = {}) {
+      this.canvas = canvas;
+      this.ctx = canvas.getContext('2d', { alpha: false });
+      if (!this.ctx) throw new Error('浏览器不支持 Canvas 2D。');
+      this.callbacks = callbacks;
+      this.state = 'idle';
+      this.config = { task: 'flick', sensitivity: 0.35, duration: 12, pixelScale: 1, inputMode: 'locked' };
+      this.yaw = 0;
+      this.pitch = 0;
+      this.target = { yaw: 9 * RAD, pitch: 3 * RAD, radius: 1.25 * RAD };
+      this.width = 900;
+      this.height = 500;
+      this._destroyed = false;
+      this._flashUntil = 0;
+      this._elapsedBefore = 0;
+      this._lastFrame = performance.now();
+      this._resize = this.resize.bind(this);
+      this.resize();
+      this._observer = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(this._resize) : null;
+      if (this._observer) this._observer.observe(canvas);
+      else global.addEventListener('resize', this._resize);
+      this._watchdog = global.setInterval(() => this._tick(performance.now()), 100);
+      this._raf = global.requestAnimationFrame(now => this._frame(now));
+    }
+    resize() {
+      const box = this.canvas.getBoundingClientRect();
+      this.width = Math.max(1, box.width || this.canvas.clientWidth || 900);
+      this.height = Math.max(1, box.height || this.canvas.clientHeight || 500);
+      this.dpr = Math.min(2, global.devicePixelRatio || 1);
+      this.canvas.width = Math.round(this.width * this.dpr);
+      this.canvas.height = Math.round(this.height * this.dpr);
+      // VALORANT uses 103° horizontal at 16:9. Preserve vertical field of view.
+      this.focal = this.height / (2 * Math.tan(103 * RAD / 2) / (16 / 9));
+    }
+    _state(next, reason = '') {
+      this.state = next;
+      if (this.callbacks.onState) this.callbacks.onState({ state: next, reason });
+    }
+    start(options = {}) {
+      if (this._destroyed) throw new Error('AimEngine 已销毁。');
+      const sensitivity = Number(options.sensitivity ?? 0.35);
+      const duration = Number(options.duration ?? 12);
+      if (!Number.isFinite(sensitivity) || sensitivity <= 0 || !Number.isFinite(duration) || duration <= 0) throw new Error('灵敏度与测试时长必须大于 0。');
+      this.config = { task: ['flick', 'micro', 'track'].includes(options.task) ? options.task : 'flick', sensitivity, duration, seed: Number(options.seed ?? 123) >>> 0, inputMode: options.inputMode || 'locked', pixelScale: clamp(Number(options.pixelScale) || 1, 0.01, 100) };
+      this.random = randomSource(this.config.seed);
+      this.yaw = 0;
+      this.pitch = 0;
+      this._elapsedBefore = 0;
+      this._runStart = performance.now();
+      this._lastFrame = this._runStart;
+      this._lastInputAt = 0;
+      this._previousElapsed = 0;
+      this._tickAt = 0;
+      this._flashUntil = 0;
+      this._stats = { hits: 0, spawned: 0, timedOut: 0, acquireMs: [], efficiency: [], corrections: 0, trackSeconds: 0, measuredSeconds: 0, errorIntegral: 0, movementCount: 0, movementDistanceDeg: 0, frames: 0, slowFrames: 0 };
+      this._trackPhase = (this.config.seed % 1000) / 1000 * Math.PI * 2;
+      this._state('running');
+      if (this.config.task === 'track') {
+        this._stats.spawned = 1;
+        this._updateTrack(0);
+      } else this._spawn(0, true);
+      this._tick(this._runStart, true);
+      return this;
+    }
+    elapsed(now = performance.now()) {
+      return Math.min(this.config.duration, Math.max(0, this._elapsedBefore + (this.state === 'running' ? (now - this._runStart) / 1000 : 0)));
+    }
+    pause(reason = 'manual') {
+      if (this.state !== 'running') return;
+      const now = performance.now();
+      this._elapsedBefore = this.elapsed(now);
+      this._state('paused', reason);
+      this._tick(now, true);
+    }
+    resume() {
+      if (this.state !== 'paused') return;
+      this._runStart = performance.now();
+      this._lastFrame = this._runStart;
+      this._state('running');
+      this._tick(this._runStart, true);
+    }
+    stop() {
+      if (!['running', 'paused'].includes(this.state)) return;
+      if (this.state === 'running') this._elapsedBefore = this.elapsed();
+      this._state('idle', 'stopped');
+    }
+    setPointerLocked(value) { this.pointerLocked = Boolean(value); }
+    feedMovement(dx, dy) { return this.handleMovement(dx, dy); }
+    handleMovement(dx, dy) {
+      if (this.state !== 'running' || !Number.isFinite(dx) || !Number.isFinite(dy)) return;
+      const now = performance.now();
+      if (this.elapsed(now) >= this.config.duration) { this._finish(now); return; }
+      const oldDirection = direction(this.yaw, this.pitch);
+      const gain = this.config.sensitivity * YAW * RAD * this.config.pixelScale;
+      this.yaw += dx * gain;
+      this.pitch = clamp(this.pitch - dy * gain, -85 * RAD, 85 * RAD);
+      const newDirection = direction(this.yaw, this.pitch);
+      const distance = angle(oldDirection, newDirection);
+      this._stats.movementCount += dx !== 0 || dy !== 0 ? 1 : 0;
+      this._stats.movementDistanceDeg += distance * DEG;
+      this._lastInputAt = now;
+      if (this.config.task === 'track') return;
+      this.target.path += distance;
+      const targetDirection = direction(this.target.yaw, this.target.pitch);
+      const newDistance = angle(newDirection, targetDirection);
+      const closest = segmentDistance(oldDirection, newDirection, targetDirection);
+      // A fast sweep through a target counts, even when both mouse-event endpoints
+      // are outside. Only the existing target may be hit by this event.
+      if (closest <= this.target.radius) {
+        this._hit(now);
+        return;
+      }
+      this.target.closest = Math.min(this.target.closest, newDistance);
+      if (!this.target.corrected && this.target.closest < this.target.radius * 3 && newDistance > this.target.closest + this.target.radius * 0.8) {
+        this.target.corrected = true;
+      }
+    }
+    _spawn(elapsed, first = false) {
+      const micro = this.config.task === 'micro';
+      const previous = first ? { yaw: 0, pitch: 0 } : this.target;
+      let yaw = 0, pitch = 0;
+      // Sequence depends only on task and seed, never sensitivity or cursor path.
+      // Micro tasks alternate a central anchor and a nearby precise correction.
+      if (micro) {
+        const side = this.random() > 0.5 ? 1 : -1;
+        yaw = clamp(previous.yaw + side * (3.8 + this.random() * 4.7) * RAD, -17 * RAD, 17 * RAD);
+        pitch = clamp(previous.pitch + (this.random() - 0.5) * 7 * RAD, -9 * RAD, 9 * RAD);
+        if (Math.abs(yaw - previous.yaw) < 2.2 * RAD) yaw = previous.yaw - side * 5 * RAD;
+      } else {
+        for (let tries = 0; tries < 20; tries++) {
+          yaw = (this.random() * 2 - 1) * 27 * RAD;
+          pitch = (this.random() * 2 - 1) * 12 * RAD;
+          if (Math.hypot(yaw - previous.yaw, pitch - previous.pitch) >= 12 * RAD) break;
+        }
+      }
+      const current = direction(this.yaw, this.pitch);
+      const ideal = angle(current, direction(yaw, pitch));
+      this.target = { yaw, pitch, radius: (micro ? 0.53 : 1.45) * RAD, bornAt: performance.now(), bornElapsed: elapsed, lifetime: micro ? 2.7 : 2.35, ideal, path: 0, closest: ideal, corrected: false };
+      this._stats.spawned++;
+    }
+    _hit(now) {
+      const elapsed = this.elapsed(now);
+      this._stats.hits++;
+      this._stats.acquireMs.push(Math.max(1, (elapsed - this.target.bornElapsed) * 1000));
+      this._stats.efficiency.push(clamp(Math.max(0, this.target.ideal - this.target.radius) / Math.max(0.001, this.target.path), 0, 1));
+      if (this.target.corrected) this._stats.corrections++;
+      this._flashUntil = now + 140;
+      this._spawn(elapsed);
+    }
+    _updateTrack(elapsed) {
+      const phase = this._trackPhase;
+      // Analytic movement: identical at the same time in every candidate round.
+      this.target = {
+        yaw: (19 * Math.sin(elapsed * 0.8 + phase) + 5 * Math.sin(elapsed * 1.67 + phase * 0.5)) * RAD,
+        pitch: (7 * Math.sin(elapsed * 1.05 + phase + 0.7) + 2 * Math.cos(elapsed * 1.9)) * RAD,
+        radius: 1.65 * RAD
+      };
+    }
+    _score() {
+      const s = this._stats;
+      if (!s) return 0;
+      if (this.config.task === 'track') {
+        const ratio = s.measuredSeconds > 0 ? s.trackSeconds / s.measuredSeconds : 0;
+        const error = s.measuredSeconds > 0 ? s.errorIntegral / s.measuredSeconds : 90;
+        return finite(100 * (0.85 * ratio + 0.15 * Math.exp(-error / 6)));
+      }
+      const efficiency = s.efficiency.length ? s.efficiency.reduce((a, b) => a + b, 0) / s.efficiency.length : 0;
+      const corrections = (s.hits + s.timedOut) ? s.corrections / (s.hits + s.timedOut) : 0;
+      return finite(s.hits / this.config.duration * 100 * (0.65 + 0.35 * efficiency) * (1 - 0.1 * corrections));
+    }
+    _tick(now, force = false) {
+      if (!['running', 'paused'].includes(this.state)) return;
+      const elapsed = this.elapsed(now);
+      if (this.state === 'running' && elapsed >= this.config.duration) { this._finish(now); return; }
+      if (force || now - this._tickAt >= 80) {
+        this._tickAt = now;
+        if (this.callbacks.onTick) this.callbacks.onTick({ state: this.state, task: this.config.task, elapsed, remaining: Math.max(0, this.config.duration - elapsed), hits: this._stats.hits, spawned: this._stats.spawned, trackingRatio: this._stats.measuredSeconds > 0 ? this._stats.trackSeconds / this._stats.measuredSeconds : 0, score: this._score() });
+      }
+    }
+    _finish(now) {
+      if (this.state !== 'running') return;
+      this._elapsedBefore = this.config.duration;
+      const s = this._stats;
+      const average = values => values.length ? values.reduce((a, b) => a + b, 0) / values.length : 0;
+      const result = {
+        task: this.config.task, sensitivity: this.config.sensitivity, duration: this.config.duration, seed: this.config.seed, inputMode: this.config.inputMode,
+        hits: s.hits, spawned: s.spawned, timedOut: s.timedOut,
+        completionRate: s.spawned ? s.hits / s.spawned : 0,
+        meanAcquireMs: average(s.acquireMs), meanPathEfficiency: average(s.efficiency), overshootRate: (s.hits + s.timedOut) ? s.corrections / (s.hits + s.timedOut) : 0,
+        trackingRatio: s.measuredSeconds > 0 ? clamp(s.trackSeconds / s.measuredSeconds, 0, 1) : 0,
+        meanErrorDeg: s.measuredSeconds > 0 ? s.errorIntegral / s.measuredSeconds : 0,
+        movementCount: s.movementCount, movementDistanceDeg: s.movementDistanceDeg, measuredSeconds: s.measuredSeconds,
+        fps: s.frames / this.config.duration, slowFrameRatio: s.frames ? s.slowFrames / s.frames : 1,
+        score: this._score(), angularGainDeg: this.config.sensitivity * YAW * this.config.pixelScale,
+        finishedAt: new Date().toISOString()
+      };
+      this._state('finished');
+      if (this.callbacks.onTick) this.callbacks.onTick({ state: 'finished', task: this.config.task, elapsed: this.config.duration, remaining: 0, hits: s.hits, spawned: s.spawned, trackingRatio: result.trackingRatio, score: result.score });
+      if (this.callbacks.onEnd) this.callbacks.onEnd(Object.freeze(result));
+    }
+    _frame(now) {
+      if (this._destroyed) return;
+      if (this.state === 'running') {
+        const elapsed = this.elapsed(now);
+        const dt = Math.max(0, Math.min((now - this._lastFrame) / 1000, this.config.duration - (this._previousElapsed || 0)));
+        this._stats.frames++;
+        if (dt > 0.05) this._stats.slowFrames++;
+        if (this.config.task === 'track') {
+          this._updateTrack(elapsed);
+          const error = angle(direction(this.yaw, this.pitch), direction(this.target.yaw, this.target.pitch));
+          // Ignore large unsampled stalls for scoring; report sampled duration and
+          // slow frames so the recommendation can reject low-quality runs.
+          const sampledDt = Math.min(dt, 0.15);
+          this._stats.measuredSeconds += sampledDt;
+          this._stats.errorIntegral += sampledDt * error * DEG;
+          if (error <= this.target.radius) this._stats.trackSeconds += sampledDt;
+        } else if (elapsed - this.target.bornElapsed >= this.target.lifetime) {
+          this._stats.timedOut++;
+          if (this.target.corrected) this._stats.corrections++;
+          this._spawn(elapsed);
+        }
+        this._previousElapsed = elapsed;
+        this._tick(now);
+      }
+      this._lastFrame = now;
+      this._draw(now);
+      this._raf = global.requestAnimationFrame(time => this._frame(time));
+    }
+    _project(vector) {
+      const sy = Math.sin(this.yaw), cy = Math.cos(this.yaw), sp = Math.sin(this.pitch), cp = Math.cos(this.pitch);
+      const x = cy * vector[0] - sy * vector[2];
+      const z0 = sy * vector[0] + cy * vector[2];
+      const y = cp * vector[1] - sp * z0;
+      const z = sp * vector[1] + cp * z0;
+      return z <= 0.04 ? null : { x: this.width / 2 + x / z * this.focal, y: this.height / 2 - y / z * this.focal, z };
+    }
+    _line(a, b) {
+      const p = this._project(a), q = this._project(b);
+      if (!p || !q) return;
+      this.ctx.beginPath(); this.ctx.moveTo(p.x, p.y); this.ctx.lineTo(q.x, q.y); this.ctx.stroke();
+    }
+    _draw(now) {
+      const ctx = this.ctx, w = this.width, h = this.height;
+      ctx.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
+      const bg = ctx.createLinearGradient(0, 0, 0, h);
+      bg.addColorStop(0, '#0c1824'); bg.addColorStop(0.57, '#101f2b'); bg.addColorStop(1, '#07131d');
+      ctx.fillStyle = bg; ctx.fillRect(0, 0, w, h);
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = 'rgba(85,145,158,.10)';
+      for (let x = -36; x <= 36; x += 4) this._line([x, -7, 4], [x, -7, 56]);
+      for (let z = 6; z <= 56; z += 4) this._line([-36, -7, z], [36, -7, z]);
+      ctx.strokeStyle = 'rgba(85,145,158,.065)';
+      for (let x = -36; x <= 36; x += 6) this._line([x, -7, 44], [x, 25, 44]);
+      for (let y = -7; y <= 25; y += 4) this._line([-36, y, 44], [36, y, 44]);
+      ctx.strokeStyle = 'rgba(101,194,198,.15)';
+      this._line([-36, -7, 44], [36, -7, 44]);
+      this._line([-36, 9, 44], [36, 9, 44]);
+      const p = this._project(direction(this.target.yaw, this.target.pitch));
+      const onTarget = this.config.task === 'track' && this.state === 'running' && angle(direction(this.yaw, this.pitch), direction(this.target.yaw, this.target.pitch)) <= this.target.radius;
+      if (p && p.x >= -80 && p.x <= w + 80 && p.y >= -80 && p.y <= h + 80) {
+        const radius = Math.max(2, this.focal * Math.tan(this.target.radius) / p.z);
+        ctx.save();
+        ctx.shadowColor = onTarget ? '#63f3d6' : '#ff596c';
+        ctx.shadowBlur = onTarget ? 25 : 18;
+        ctx.fillStyle = onTarget ? 'rgba(99,243,214,.18)' : 'rgba(255,81,104,.16)';
+        ctx.beginPath(); ctx.arc(p.x, p.y, radius, 0, Math.PI * 2); ctx.fill();
+        ctx.shadowBlur = 0;
+        ctx.strokeStyle = onTarget ? '#83ffe3' : '#ff6676'; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.arc(p.x, p.y, radius, 0, Math.PI * 2); ctx.stroke();
+        ctx.fillStyle = onTarget ? '#adffef' : '#ffb7be';
+        ctx.beginPath(); ctx.arc(p.x, p.y, Math.min(2.2, radius * 0.2), 0, Math.PI * 2); ctx.fill();
+        if (this.config.task !== 'track' && this.state === 'running') {
+          const remaining = clamp(1 - (this.elapsed(now) - this.target.bornElapsed) / this.target.lifetime, 0, 1);
+          ctx.strokeStyle = 'rgba(255,133,145,.35)'; ctx.lineWidth = 1;
+          ctx.beginPath(); ctx.arc(p.x, p.y, radius + 5, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * remaining); ctx.stroke();
+        }
+        ctx.restore();
+      } else if (this.state === 'running') {
+        const aim = direction(this.target.yaw, this.target.pitch);
+        const approx = this._project(aim);
+        let dx = approx ? approx.x - w / 2 : Math.sin(this.target.yaw - this.yaw);
+        let dy = approx ? approx.y - h / 2 : -(this.target.pitch - this.pitch);
+        const len = Math.hypot(dx, dy) || 1; dx /= len; dy /= len;
+        const extent = Math.min(w * .42 / Math.max(.001, Math.abs(dx)), h * .38 / Math.max(.001, Math.abs(dy)));
+        const x = w / 2 + dx * extent, y = h / 2 + dy * extent;
+        ctx.save(); ctx.translate(x, y); ctx.rotate(Math.atan2(dy, dx));
+        ctx.fillStyle = '#ff7080'; ctx.beginPath(); ctx.moveTo(8, 0); ctx.lineTo(-5, -5); ctx.lineTo(-5, 5); ctx.closePath(); ctx.fill(); ctx.restore();
+      }
+      // The crosshair remains at the exact optical center at every canvas size.
+      const cx = w / 2, cy = h / 2;
+      ctx.save();
+      ctx.strokeStyle = '#000a'; ctx.lineWidth = 3;
+      const crosshair = () => { ctx.beginPath(); ctx.moveTo(cx - 10, cy); ctx.lineTo(cx - 4, cy); ctx.moveTo(cx + 4, cy); ctx.lineTo(cx + 10, cy); ctx.moveTo(cx, cy - 10); ctx.lineTo(cx, cy - 4); ctx.moveTo(cx, cy + 4); ctx.lineTo(cx, cy + 10); ctx.stroke(); };
+      crosshair(); ctx.strokeStyle = '#93ffe0'; ctx.lineWidth = 1.5; crosshair();
+      ctx.fillStyle = '#a5ffe8'; ctx.fillRect(cx - 1, cy - 1, 2, 2);
+      if (now < this._flashUntil) {
+        ctx.strokeStyle = 'rgba(166,255,224,.9)'; ctx.lineWidth = 1.5;
+        ctx.beginPath(); for (const [x, y] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) { ctx.moveTo(cx + x * 13, cy + y * 13); ctx.lineTo(cx + x * 18, cy + y * 18); } ctx.stroke();
+      }
+      ctx.restore();
+      // Subtle optics vignette, deliberately no visible system cursor.
+      const vignette = ctx.createRadialGradient(w / 2, h / 2, Math.min(w, h) * .28, w / 2, h / 2, Math.max(w, h) * .7);
+      vignette.addColorStop(0, 'rgba(0,0,0,0)'); vignette.addColorStop(1, 'rgba(0,5,10,.38)');
+      ctx.fillStyle = vignette; ctx.fillRect(0, 0, w, h);
+    }
+    destroy() {
+      if (this._destroyed) return;
+      this._destroyed = true;
+      global.cancelAnimationFrame(this._raf);
+      global.clearInterval(this._watchdog);
+      if (this._observer) this._observer.disconnect();
+      else global.removeEventListener('resize', this._resize);
+      this._state('destroyed');
+    }
+  }
+  global.AimEngine = AimEngine;
+})(window);
+
+;
+(function () {
+'use strict';
+const $ = id => document.getElementById(id);
+const esc = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt = n => Number(n).toFixed(3);
+const tasks = {flick:{name:'目标转移 · 甩枪',short:'甩枪',hint:'用中心准星碰触红色目标。新目标出现后继续移动，不需要点击。'},micro:{name:'精准修正 · 微调',short:'微调',hint:'目标更小、距离更近。用自然的小幅修正，让中心准星碰到目标。'},track:{name:'持续控制 · 跟枪',short:'跟枪',hint:'持续跟随移动目标，让中心准星尽量留在圆内。不需要点击。'}};
+const storageKey = 'personal-sens-lab-v1';
+let profile = null, suite = null, history = [], activeReport = null, calibration = null;
+let style = 'mixed', mode = null, phase = 'idle', engine = null, inputMode = 'locked', raw = false, rawAll = false;
+let countdownTimer = null, toastTimer = null, calibrationX = 0, calibrationY = 0, calibrationAbs = 0;
+let fallbackLast = null, previousFocus = null, currentView = 'profile', runScale = 1;
+let startedAt = 0, pausedCount = 0, stageRequestId = 0;
+const emptyReportMarkup = $('reportContent').innerHTML;
+try {
+ const saved = JSON.parse(localStorage.getItem(storageKey) || 'null');
+ if (saved && SensModel.validateProfile(saved.profile).valid) {
+  profile = SensModel.validateProfile(saved.profile).profile;
+  history = Array.isArray(saved.history) ? saved.history.map(restoreRecord).filter(Boolean).slice(0,8) : [];
+  suite = restoreSuite(saved.suite, profile);
+  const c=saved.calibration;
+  if (c && typeof c.raw==='boolean' && Number.isFinite(c.factor) && c.factor>=0.05 && c.factor<=20 && Number.isFinite(c.counts) && c.counts>0 && Number.isFinite(c.measuredDpi) && c.measuredDpi>0 && (c.dpi===undefined || c.dpi===profile.dpi)) calibration=c;
+ }
+} catch (_) { /* File URLs and private browsing may disable localStorage. */ }
+function matchingCandidates(p, saved){
+ const made=SensModel.makeCandidates(p);
+ if(!made.valid||!Array.isArray(saved)||saved.length!==3)return null;
+ if(!made.candidates.every(c=>saved.some(s=>s&&s.id===c.id&&s.sensitivity===c.sensitivity)))return null;
+ return made.candidates;
+}
+function validRound(run,p,candidates,item){
+ if(!run||!Object.hasOwn(tasks,run.task)||!candidates.some(c=>c.id===run.candidateId&&c.sensitivity===run.sensitivity))return false;
+ if(item&&(run.task!==item.task||run.candidateId!==item.candidateId||run.seed!==item.seed))return false;
+ if(!Number.isFinite(run.duration)||Math.abs(run.duration-p.duration)>0.25||typeof run.raw!=='boolean'||!['locked','cursor'].includes(run.inputMode))return false;
+ return ['score','hits','trackingRatio','meanAcquireMs','meanErrorDeg','meanPathEfficiency'].every(k=>Number.isFinite(run[k])&&run[k]>=0)&&run.trackingRatio<=1&&run.meanPathEfficiency<=1;
+}
+function restoreRecord(record){
+ if(!record||typeof record.id!=='string'||!Number.isFinite(Date.parse(record.createdAt)))return null;
+ const checked=SensModel.validateProfile(record.profile);if(!checked.valid)return null;
+ const candidates=matchingCandidates(checked.profile,record.candidates);
+ if(!candidates||!Array.isArray(record.runs)||record.runs.length!==9||!record.runs.every(r=>validRound(r,checked.profile,candidates)))return null;
+ if(!['flick','micro','track'].every(task=>new Set(record.runs.filter(r=>r.task===task).map(r=>r.seed)).size===1))return null;
+ if(!SensModel.analyze(checked.profile,candidates,record.runs).completed)return null;
+ return {...record,profile:checked.profile,candidates};
+}
+function restoreSuite(saved,p){
+ if(!saved||!Array.isArray(saved.order)||saved.order.length!==9||!Array.isArray(saved.runs)||saved.runs.length>9||!Number.isInteger(saved.seed)||saved.seed<0||!Number.isFinite(Date.parse(saved.createdAt)))return null;
+ if(saved.profileSnapshot){const check=SensModel.validateProfile(saved.profileSnapshot);if(!check.valid||JSON.stringify(check.profile)!==JSON.stringify(p))return null;}
+ const candidates=matchingCandidates(p,saved.candidates);if(!candidates)return null;
+ const keys=new Set();
+ for(let i=0;i<9;i++){
+  const item=saved.order[i],task=['flick','micro','track'][Math.floor(i/3)];
+  if(!item||item.task!==task||!candidates.some(c=>c.id===item.candidateId)||item.seed!==((saved.seed+Math.floor(i/3)*104729)>>>0))return null;
+  keys.add(item.task+':'+item.candidateId);
+ }
+ if(keys.size!==9||!saved.runs.every((r,i)=>validRound(r,p,candidates,saved.order[i])))return null;
+ return {...saved,id:typeof saved.id==='string'?saved.id:String(saved.seed),profileSnapshot:{...p},candidates,warnings:SensModel.makeCandidates(p).warnings};
+}
+function invalidateSuiteForCalibration(){
+ if(suite&&suite.runs.length){archiveCurrentSuite();suite=createSuite();activeReport=null;toast('输入校正已更改，已重新建立九轮测评，避免混用两种位移条件。历史报告仍保留。');return true;}
+ return false;
+}
+function currentSuiteRecord(){
+ return suite&&suite.runs.length===9?{profile:{...(suite.profileSnapshot||profile)},candidates:suite.candidates,runs:suite.runs,createdAt:suite.completedAt||suite.runs.at(-1).finishedAt||suite.createdAt,id:suite.id}:null;
+}
+function archiveCurrentSuite(){
+ const record=currentSuiteRecord();if(!record||!SensModel.analyze(record.profile,record.candidates,record.runs).completed)return false;
+ if(!history.some(h=>h.id===record.id))history.unshift(record);
+ history=history.slice(0,8);suite.saved=true;return true;
+}
+function persist() {
+ try { localStorage.setItem(storageKey, JSON.stringify({profile,suite,history,calibration})); }
+ catch (_) { toast('浏览器限制了本地保存；本次页面内仍可完成测评和下载报告。'); }
+}
+function toast(message) { $('toast').textContent=message;$('toast').hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').hidden=true,4300); }
+function setStyle(value) {
+ style=value;
+ document.querySelectorAll('[data-choice="style"] .choice').forEach(b=>{const selected=b.dataset.value===value;b.classList.toggle('selected',selected);b.setAttribute('aria-pressed',String(selected));});
+}
+function fillForm(p) { if(!p)return;for(const k of ['dpi','currentSens','padWidth','currentIssue','priority','duration'])$(k).value=k==='currentSens'?fmt(p[k]):p[k];setStyle(p.style); }
+function goto(view) {
+ currentView=view;
+ document.querySelectorAll('.view').forEach(el=>el.hidden=el.id!=='view-'+view);
+ document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===view));
+ $('breadcrumb').textContent={profile:'个人灵敏度实验室',calibration:'输入校准',testing:'实战测评',report:'个人灵敏度报告'}[view];
+ if(view==='calibration')renderCalibration();
+ if(view==='testing')renderSuite();
+ if(view==='report')renderReport();
+ window.scrollTo({top:0,behavior:'instant'});
+}
+document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>goto(b.dataset.view)));
+document.addEventListener('click',e=>{const b=e.target.closest('[data-goto]');if(b)goto(b.dataset.goto);});
+document.querySelectorAll('[data-choice="style"] button').forEach(b=>b.addEventListener('click',()=>setStyle(b.dataset.value)));
+$('profileForm').addEventListener('submit',e=>{
+ e.preventDefault();
+ const checked=SensModel.validateProfile({dpi:$('dpi').value,currentSens:$('currentSens').value,padWidth:$('padWidth').value,currentIssue:$('currentIssue').value,priority:$('priority').value,duration:$('duration').value,style});
+ $('profileError').textContent=checked.errors.join(' ');
+ if(!checked.valid)return;
+ const changed=JSON.stringify(profile)!==JSON.stringify(checked.profile);
+ if(changed){profile=checked.profile;suite=null;activeReport=null;calibration=null;}
+ persist();goto('calibration');
+});
+function requireProfile(){if(profile)return true;goto('profile');toast('请先填写并保存你的个人档案。');return false;}
+function renderCalibration(){
+ $('profileSummary').textContent=profile?`${profile.dpi} DPI · 当前 ${fmt(profile.currentSens)} · eDPI ${SensModel.edpi(profile.dpi,profile.currentSens).toFixed(1)} · 约 ${SensModel.cm360(profile.dpi,profile.currentSens).toFixed(1)} cm/360°`:'请先保存个人档案。';
+ $('calibrationResult').textContent=calibration?`${calibration.raw?'原始输入校验':'普通锁定位移校正'}：记录 ${Math.round(calibration.counts)} 单位，估计 ${Math.round(calibration.measuredDpi)} DPI。${calibration.raw?'原始输入不套用校正，直接与游戏计数匹配。':'备用校正系数 '+calibration.factor.toFixed(3)+'；仍需游戏实测。'}`:'尚未校验。支持原始输入时可直接开始测试。';
+}
+function createSuite(){
+ const made=SensModel.makeCandidates(profile);if(!made.valid)return null;
+ const seed=Math.floor(Math.random()*0x7fffffff);
+ const shuffled=made.candidates.map(c=>c.id);
+ for(let i=shuffled.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]];}
+ // Rotate each task's candidate order: every candidate gets an early, middle and late position.
+ const order=['flick','micro','track'].flatMap((task,index)=>[0,1,2].map(offset=>({task,candidateId:shuffled[(index+offset)%3],seed:(seed+index*104729)>>>0})));
+ const createdAt=new Date().toISOString();
+ return {id:createdAt+'-'+seed,profileSnapshot:{...profile},candidates:made.candidates,warnings:made.warnings,order,runs:[],seed,createdAt,saved:false};
+}
+function ensureSuite(){if(!suite)suite=createSuite();return suite;}
+function renderSuite(){
+ if(profile)ensureSuite();
+ const count=suite?suite.runs.length:0;
+ $('roundCount').innerHTML=count+' <span>/ 9</span>';
+ $('roundDuration').innerHTML=(profile?profile.duration:12)+' <span>SEC</span>';
+ $('suiteProgress').style.width=(count/9*100)+'%';
+ $('startRoundBtn').disabled=!profile;
+ if(count>=9){
+  const result=SensModel.analyze(profile,suite.candidates,suite.runs);
+  $('nextRoundTitle').textContent=result.completed?'全部测试已完成':'九轮已结束，需要重新采样';
+  $('nextRoundHint').textContent=result.completed?'你的测试数据已就绪。查看推荐档位与各项表现，再到游戏中验证。':result.errors.join(' ');
+  $('startRoundBtn').textContent=result.completed?'查看灵敏度报告 →':'重新测评 →';
+ }else{
+  const next=suite?suite.order[count]:null;
+  $('nextRoundTitle').textContent=next?`第 ${count+1} 轮 / 9 · ${tasks[next.task].name}`:'先建立个人档案';
+  $('nextRoundHint').textContent=next?tasks[next.task].hint:'请先填写鼠标 DPI 与当前游戏灵敏度，再保存个人档案。';
+  $('startRoundBtn').textContent=`开始第 ${count+1} 轮 →`;
+ }
+ $('roundGrid').innerHTML=(suite?suite.order:[]).map((r,i)=>`<div class="round ${i<count?'done':i===count?'current':''}"><b>${i<count?'✓':'0'+(i+1)} / ${tasks[r.task].short}</b>${i<count?'已记录':i===count?'接下来':'待测试'} · 档位隐藏</div>`).join('');
+ const last=suite&&suite.runs.at(-1);
+ $('lastRound').textContent=last?`上一轮：${tasks[last.task].short} · ${last.task==='track'?'准星在靶 '+(last.trackingRatio*100).toFixed(1)+'%':'命中 '+last.hits+' 次 · 平均获取 '+Math.round(last.meanAcquireMs)+' ms'} · 数据已保存`:'每轮从 3 秒准备倒计时开始。退出本轮不会写入半成品数据。';
+}
+$('toTestBtn').addEventListener('click',()=>{if(requireProfile())goto('testing');});
+$('restartSuiteBtn').addEventListener('click',()=>{if(!requireProfile())return;archiveCurrentSuite();suite=createSuite();activeReport=null;persist();renderSuite();toast('已建立新的九轮测评，历史报告仍可查看。');});
+$('startRoundBtn').addEventListener('click',()=>{
+ if(!requireProfile())return;ensureSuite();
+ if(suite.runs.length>=9){if(SensModel.analyze(profile,suite.candidates,suite.runs).completed){activeReport=null;goto('report');return;}suite=createSuite();persist();renderSuite();}
+ openStage('official');
+});
+$('warmupBtn').addEventListener('click',()=>{if(requireProfile())openStage('warmup');});
+$('calibrateBtn').addEventListener('click',()=>{if(requireProfile())openStage('calibration');});
+$('resetCalibrationBtn').addEventListener('click',()=>{const changed=!!calibration;calibration=null;const restarted=changed&&invalidateSuiteForCalibration();persist();renderCalibration();if(!restarted)toast('位移校正已重置。');});
+function getEngine(){
+ if(!engine)engine=new AimEngine($('aimCanvas'),{
+  onTick:tick=>{
+   $('stageTime').textContent=tick.remaining.toFixed(1);
+   $('stageHits').textContent=tick.task==='track'?(tick.trackingRatio*100).toFixed(0)+'%':tick.hits;
+   $('stageProgress').style.width=(tick.remaining/engine.config.duration*100)+'%';
+  },onEnd:finishRun,
+  onState:s=>{if(s.state==='running')phase='running';}
+ });
+ return engine;
+}
+function overlay(html){$('overlayContent').innerHTML=html;$('stageOverlay').hidden=false;}
+function clearCountdown(){if(countdownTimer!==null){clearInterval(countdownTimer);countdownTimer=null;}}
+function showStage(){
+ previousFocus=document.activeElement;$('stage').hidden=false;document.body.style.overflow='hidden';getEngine().resize();$('stageHits').textContent='0';fallbackLast=null;
+ $('exitStageBtn').focus();
+}
+async function openStage(nextMode){
+ if(nextMode==='official')activeReport=null;
+ const requestId=++stageRequestId;mode=nextMode;phase='requesting';pausedCount=0;showStage();
+ const item=mode==='official'?suite.order[suite.runs.length]:{task:'flick'};
+ $('stageTitle').innerHTML=mode==='calibration'?'10 cm 位移校验<small>MOVE RIGHT · PRESS ENTER TO FINISH</small>':`${mode==='warmup'?'输入练习':`第 ${suite.runs.length+1} 轮 / 9`} · ${tasks[item.task].short}<small>TOUCH TO HIT / NO CLICK</small>`;
+ $('stageTime').textContent=mode==='calibration'?'—':(mode==='warmup'?8:profile.duration).toFixed(1);
+ $('stageProgress').style.width='100%';
+ overlay('<h2>正在锁定鼠标…</h2><p>无需点击目标，鼠标移动即可控制中心准星。</p>');
+ const ok=await requestLock();
+ if(requestId!==stageRequestId||phase!=='requesting'||$('stage').hidden){if($('stage').hidden)releaseLock();return;}
+ if(ok){rawAll=raw;beginPreparation();}else showInputFallback(false);
+}
+function waitLock(ms=700){return new Promise(resolve=>{if(document.pointerLockElement===$('aimCanvas')){resolve(true);return;}let timer;const changed=()=>{if(document.pointerLockElement===$('aimCanvas')){cleanup();resolve(true);}};const cleanup=()=>{clearTimeout(timer);document.removeEventListener('pointerlockchange',changed);};document.addEventListener('pointerlockchange',changed);timer=setTimeout(()=>{cleanup();resolve(document.pointerLockElement===$('aimCanvas'));},ms);});}
+async function requestLock(){
+ inputMode='locked';
+ const canvas=$('aimCanvas');
+ if(typeof canvas.requestPointerLock!=='function')return false;
+ if(document.pointerLockElement===canvas){updateInputLabel();return true;}
+ raw=false;
+ try{
+  const promise=canvas.requestPointerLock({unadjustedMovement:true});
+  if(promise&&typeof promise.then==='function'){await promise;raw=true;}
+  if(await waitLock()){updateInputLabel();return true;}
+ }catch(_){/* Not all browsers support unadjusted movement. */}
+ if(phase==='idle')return false;
+ try{const p=canvas.requestPointerLock();if(p&&typeof p.then==='function')await p;if(await waitLock()){raw=false;updateInputLabel();return true;}}catch(_){}
+ return false;
+}
+function updateInputLabel(){
+ const status=inputMode==='cursor'?'备用光标 · 仅方向参考':raw?'原始位移 · 鼠标已锁定':'普通锁定 · 可能受系统加速影响';
+ $('stageInputLabel').textContent=status;
+ $('inputStatus').textContent=inputMode==='cursor'?'备用光标':raw?'原始位移':'普通锁定';
+}
+function showInputFallback(resuming){
+ phase='ready';
+ overlay(`<h2>暂未取得鼠标锁定</h2><p>请用桌面 Chrome / Edge 打开 HTML，并允许鼠标锁定。备用光标会受屏幕边缘和系统设置影响，结果仅供方向参考。</p><div class="overlay-actions"><button class="btn btn-primary" id="retryLockBtn">重试锁定鼠标</button><button class="btn btn-ghost" id="cursorModeBtn">使用备用光标模式</button></div>`);
+ $('retryLockBtn').onclick=async()=>{const requestId=stageRequestId;phase='requesting';const ok=await requestLock();if(requestId!==stageRequestId||phase!=='requesting'||$('stage').hidden){if($('stage').hidden)releaseLock();return;}if(ok){rawAll=resuming?rawAll&&raw:raw;if(resuming)resumeRun();else beginPreparation();}else showInputFallback(resuming);};
+ $('cursorModeBtn').onclick=()=>{inputMode='cursor';raw=false;rawAll=false;fallbackLast=null;updateInputLabel();if(resuming)resumeRun();else beginPreparation();};
+}
+function beginPreparation(){
+ if(mode==='calibration'){
+  phase='calibrating';calibrationX=0;calibrationY=0;calibrationAbs=0;
+  overlay('<h2>水平向右移动 10 cm</h2><p>使用尺子测量，不抬鼠，不来回移动。到达终点后按 <span class="key">Enter</span>；按 Esc 取消。</p><div class="calib-readout" id="calibCounts">0 counts</div><p>中心准星将在正式测试中显示；此处仅记录水平位移。</p>');
+  return;
+ }
+ phase='countdown';const deadline=performance.now()+3000;
+ const paint=()=>{
+  if(phase!=='countdown')return;
+  const left=Math.max(0,deadline-performance.now());
+  if(left<=0){clearCountdown();startEngine();return;}
+  overlay(`<div class="mini-label">READY / 准星碰触即命中</div><div class="count">${Math.ceil(left/1000)}</div><p>${inputMode==='cursor'?'将鼠标移到画布中央。备用模式下，移动光标带动视角。':'握稳鼠标，准备按自然习惯移动。'}<br>不用点击，听从自己的手感。</p>`);
+ };
+ clearCountdown();paint();countdownTimer=setInterval(paint,40);
+}
+function startEngine(){
+ $('stageOverlay').hidden=true;fallbackLast=null;startedAt=Date.now();
+ const item=mode==='official'?suite.order[suite.runs.length]:{task:'flick',seed:93717};
+ const candidate=mode==='official'?suite.candidates.find(c=>c.id===item.candidateId):{sensitivity:profile.currentSens};
+ runScale=raw?1:(inputMode==='locked'&&calibration&&!calibration.raw?calibration.factor:1);
+ getEngine().setPointerLocked(inputMode==='locked');
+ getEngine().start({task:item.task,sensitivity:candidate.sensitivity,duration:mode==='warmup'?8:profile.duration,seed:item.seed,inputMode,pixelScale:runScale});
+}
+function pauseRun(reason){
+ if(!['running','countdown','requesting','calibrating'].includes(phase))return;
+ if(mode==='calibration'){phase='paused';overlay('<h2>校验已中断</h2><p>校验需要一次连续的 10 cm 水平移动。请返回校准页重新开始。</p><button class="btn btn-primary" id="closeCalibrationBtn">返回校准页</button>');$('closeCalibrationBtn').onclick=()=>{closeStage();goto('calibration');};return;}
+ const wasCountdown=phase==='countdown'||phase==='requesting';
+ clearCountdown();if(engine)engine.pause(reason);phase='paused';pausedCount++;
+ overlay(`<h2>测试已暂停</h2><p>${esc(reason)}<br>暂停期间不消耗测试时间。点击继续会重新锁定鼠标。</p><div class="overlay-actions"><button class="btn btn-primary" id="resumeBtn">继续测试 →</button><button class="btn btn-ghost" id="discardBtn">放弃本轮</button></div>`);
+ $('resumeBtn').onclick=async()=>{const requestId=stageRequestId;phase='requesting';if(inputMode==='cursor'){if(wasCountdown)beginPreparation();else resumeRun();return;}const ok=await requestLock();if(requestId!==stageRequestId||phase!=='requesting'||$('stage').hidden){if($('stage').hidden)releaseLock();return;}if(ok){rawAll=rawAll&&raw;if(wasCountdown)beginPreparation();else resumeRun();}else showInputFallback(!wasCountdown);};
+ $('discardBtn').onclick=()=>closeStage();
+}
+function resumeRun(){
+ fallbackLast=null;$('stageOverlay').hidden=true;phase='running';
+ // If resuming in a different input path, record it and use that path's scale.
+ if(engine){engine.config.inputMode=inputMode;engine.config.pixelScale=raw?1:(inputMode==='locked'&&calibration&&!calibration.raw?calibration.factor:1);engine.resume();}
+}
+function releaseLock(){try{if(document.pointerLockElement=== $('aimCanvas'))document.exitPointerLock();}catch(_){} }
+function closeStage(){
+ stageRequestId++;
+ const incomplete=['running','paused','countdown'].includes(phase)&&mode==='official';
+ phase='idle';mode=null;clearCountdown();if(engine)engine.stop();releaseLock();$('stage').hidden=true;document.body.style.overflow='';fallbackLast=null;
+ if(previousFocus&&previousFocus.isConnected)previousFocus.focus();
+ renderSuite();if(incomplete)toast('本轮已退出，未计入结果；可以重新开始这一轮。');
+}
+$('exitStageBtn').addEventListener('click',closeStage);
+function finishRun(result){
+ if(phase!=='running'||!['warmup','official'].includes(mode))return;
+ phase='finished';clearCountdown();releaseLock();
+ const meta={...result,raw:rawAll,inputMode,pausedCount,pixelScale:runScale,startedAt:new Date(startedAt).toISOString()};
+ if(mode==='warmup'){
+  overlay(`<div class="eyebrow">WARMUP COMPLETE</div><h2>输入练习完成</h2><p>你碰触命中了 <b class="mint">${result.hits}</b> 个目标。${rawAll?'已取得浏览器原始位移请求。':'当前输入为备用路径，正式结果会标记匹配限制。'}<br>练习不计入正式报告。</p><button class="btn btn-primary" id="warmupDoneBtn">返回，开始正式测评 →</button>`);
+  $('warmupDoneBtn').onclick=()=>{closeStage();goto('testing');};return;
+ }
+ if(mode!=='official')return;
+ const item=suite.order[suite.runs.length];meta.candidateId=item.candidateId;
+ if(!validRound(meta,profile,suite.candidates,item)){overlay('<h2>本轮数据未通过校验</h2><p>本轮没有写入结果。请退出后重新测试这一轮。</p>');return;}
+ suite.runs.push(meta);if(suite.runs.length===9){suite.completedAt=new Date().toISOString();archiveCurrentSuite();}persist();renderSuite();
+ const last=suite.runs.length>=9;
+ const summary=result.task==='track'?`准星在靶比例 ${(result.trackingRatio*100).toFixed(1)}% · 平均误差 ${result.meanErrorDeg.toFixed(2)}°`:`命中 ${result.hits} 次 · 平均获取 ${Math.round(result.meanAcquireMs)} ms`;
+ overlay(`<div class="eyebrow">ROUND ${suite.runs.length} / 9 COMPLETE</div><h2>${last?'全部九轮已完成':'这一轮已记录。放松一下。'}</h2><p>${summary}<br>${last?'可以查看三档对比与个人推荐。':'休息几秒，保持自然握姿，再开始下一轮。'}</p><div class="overlay-actions"><button class="btn btn-primary" id="nextStageBtn">${last?'查看报告 →':'开始下一轮 →'}</button><button class="btn btn-ghost" id="returnSuiteBtn">返回测评页</button></div>`);
+ $('nextStageBtn').onclick=()=>{if(last){closeStage();activeReport=null;goto('report');}else openStage('official');};
+ $('returnSuiteBtn').onclick=()=>{closeStage();goto('testing');};
+}
+document.addEventListener('mousemove',event=>{
+ if($('stage').hidden)return;
+ let dx=0,dy=0;
+ if(document.pointerLockElement===$('aimCanvas')){dx=event.movementX||0;dy=event.movementY||0;}
+ else if(inputMode==='cursor'){
+  const box=$('aimCanvas').getBoundingClientRect();
+  if(event.clientX<box.left||event.clientX>box.right||event.clientY<box.top||event.clientY>box.bottom){fallbackLast=null;return;}
+  if(fallbackLast){dx=event.clientX-fallbackLast.x;dy=event.clientY-fallbackLast.y;}
+  fallbackLast={x:event.clientX,y:event.clientY};
+ }else return;
+ if(phase==='calibrating'){
+  calibrationX+=dx;calibrationY+=dy;calibrationAbs+=Math.abs(dx);
+  if($('calibCounts'))$('calibCounts').textContent=Math.round(calibrationX)+' counts';
+ }else if(phase==='running'&&engine)engine.handleMovement(dx,dy);
+});
+document.addEventListener('pointerlockchange',()=>{
+ const locked=document.pointerLockElement===$('aimCanvas');
+ if(engine)engine.setPointerLocked(locked);
+ if(!locked&&inputMode==='locked'&&['running','countdown','calibrating'].includes(phase))pauseRun('鼠标锁定已释放。');
+});
+document.addEventListener('visibilitychange',()=>{if(document.hidden)pauseRun('页面切到了后台。');});
+window.addEventListener('blur',()=>pauseRun('页面失去焦点。'));
+window.addEventListener('resize',()=>{if(['running','countdown'].includes(phase))pauseRun('窗口尺寸变化，已暂停以保持测试条件一致。');});
+document.addEventListener('keydown',event=>{
+ if($('stage').hidden)return;
+ if(event.key==='Enter'&&phase==='calibrating'){event.preventDefault();finishCalibration();}
+ else if(event.key==='Escape'&&inputMode==='cursor'&&['running','countdown','calibrating'].includes(phase))pauseRun('已按 Esc 暂停。');
+ // Keep keyboard focus within the visible test dialog.
+ if(event.key==='Tab'){
+  const buttons=Array.from($('stage').querySelectorAll('button')).filter(b=>!b.disabled&&b.getClientRects().length);
+  if(buttons.length){const i=buttons.indexOf(document.activeElement);event.preventDefault();buttons[(i+(event.shiftKey?-1:1)+buttons.length)%buttons.length].focus();}
+ }
+});
+function finishCalibration(){
+ const expected=profile.dpi*10/2.54;const factor=expected/Math.abs(calibrationX);
+ if(calibrationX<100||Math.abs(calibrationY)>Math.abs(calibrationX)*0.25||calibrationAbs>Math.abs(calibrationX)*1.2||factor<0.05||factor>20){
+  phase='finished';releaseLock();overlay('<h2>这次位移不适合校验</h2><p>请水平向右连续移动完整的 10 cm，避免抬鼠、回拉或明显上下移动。</p><button id="calibRetryBtn" class="btn btn-primary">返回后重新校验</button>');$('calibRetryBtn').onclick=()=>{closeStage();goto('calibration');};return;
+ }
+ calibration={factor:raw?1:factor,counts:calibrationX,raw,dpi:profile.dpi,measuredDpi:calibrationX*2.54/10,checkedAt:new Date().toISOString()};invalidateSuiteForCalibration();persist();phase='finished';releaseLock();
+ overlay(`<h2>位移校验已记录</h2><p>记录 ${Math.round(calibrationX)} 单位，估计 ${Math.round(calibration.measuredDpi)} DPI。<br>${raw?'原始输入按真实鼠标计数匹配，灵敏度不额外缩放。':'普通锁定已记录校正系数 '+factor.toFixed(3)+'，系统加速仍可能造成误差。'}</p><button class="btn btn-primary" id="calibDoneBtn">返回校准页 →</button>`);$('calibDoneBtn').onclick=()=>{closeStage();goto('calibration');};
+}
+function renderReport(){
+ let record=activeReport;
+ if(!record&&profile)record=currentSuiteRecord();
+ if(!record){$('reportContent').innerHTML=emptyReportMarkup;renderHistory();return;}
+ const analysis=SensModel.analyze(record.profile,record.candidates,record.runs);
+ if(!analysis.completed){$('reportContent').innerHTML=`<div class="panel empty"><h2>数据还不足以推荐。</h2><p>${analysis.errors.map(esc).join('<br>')}</p><button class="btn btn-primary" data-goto="testing">返回测评 →</button></div>`;renderHistory();return;}
+ activeReport=record;
+ if(suite&&record.id===suite.id&&!suite.saved){
+  if(!history.some(h=>h.id===record.id))history.unshift(record);
+  history=history.slice(0,8);suite.saved=true;persist();
+ }
+ const p=record.profile,r=analysis.recommended,change=analysis.changePct;
+ const isHistory=!suite||record.id!==suite.id;
+ $('reportContent').innerHTML=`
+ <div class="info-box" style="margin-bottom:20px"><b>${isHistory?'正在查看历史报告':'当前测评报告'}</b> · ${esc(new Date(record.createdAt).toLocaleString('zh-CN'))}${isHistory&&suite&&suite.runs.length===9?' <button class="btn btn-ghost" id="latestReportBtn" style="margin-left:12px">查看当前测评报告 →</button>':''}</div>
+ <div class="report-main"><section class="result-card"><div class="mini-label">你的建议灵敏度 / SENSITIVITY: AIM</div><div class="big-value">${fmt(r.sensitivity)}</div><div class="result-description">${p.dpi} DPI 下使用 · ${change===0?'保留当前档':`相较当前 ${fmt(p.currentSens)} ${change>0?'提高':'降低'} ${Math.abs(change).toFixed(1)}%`}</div><div class="result-metrics"><div><b>${r.edpi.toFixed(1)}</b><span>eDPI</span></div><div><b>${r.cm360.toFixed(1)} cm</b><span>约 / 360°</span></div><div><b>${r.score.toFixed(1)}</b><span>加权相对表现 / 100</span></div></div><div class="suite-actions"><button class="btn btn-mint" id="copySensBtn">复制 ${fmt(r.sensitivity)}</button><button class="btn btn-ghost" id="downloadReportBtn">下载测试报告 ↓</button></div></section><section class="panel"><div class="panel-head"><h3>填入游戏，即可应用</h3><span class="mini-label">APPLY IN GAME</span></div><div class="panel-body"><ol class="numbered"><li>鼠标驱动 DPI 保持为 <b class="mint">${p.dpi}</b>。</li><li>进入无畏契约 → 设置 → 通用 → 鼠标。</li><li>在「灵敏度：瞄准」输入 <b class="mint mono">${fmt(r.sensitivity)}</b>，检查游戏保留的数值。</li><li>进靶场验证转身、架点和点头；数值可用，是否更适合你仍要以游戏表现为准。</li></ol><span class="tag">${esc(analysis.confidenceLabel)} · 非统计置信度</span></div></section></div>
+ <section class="panel"><div class="panel-head"><h3>三档表现，展开来看</h3><span class="mini-label">NORMALIZED / 0–100</span></div><div style="overflow:auto"><table class="report-table"><thead><tr><th>测试档位</th><th>游戏灵敏度</th><th>甩枪</th><th>微调</th><th>跟枪</th><th>加权表现</th></tr></thead><tbody>${analysis.ranked.map(row=>`<tr class="${row.id===r.id?'winner':''}"><td>${row.id===r.id?'✓ 建议档':esc(row.label)}${row.isCurrent?' · 当前':''}</td><td>${fmt(row.sensitivity)}</td><td>${row.taskScores.flick.toFixed(1)}</td><td>${row.taskScores.micro.toFixed(1)}</td><td>${row.taskScores.track.toFixed(1)}</td><td>${row.score.toFixed(1)}<div class="score-bar"><i style="width:${row.score}%"></i></div></td></tr>`).join('')}</tbody></table></div><div class="panel-body explanation">${analysis.reasons.map(s=>`<p>${esc(s)}</p>`).join('')}<p class="muted">每项最高表现记为 100，仅用于本次三档横向对比。各档使用相同任务种子与时长；命中越多，后续目标也越多，测试不是完全相同的录像回放。</p></div></section>
+ ${analysis.warnings.length?`<div class="info-box warning"><b>本次证据的限制</b><br>${analysis.warnings.map(esc).join('<br>')}</div>`:''}
+ <details><summary>查看原始记录与推荐依据</summary><div style="overflow:auto"><table class="report-table"><thead><tr><th>轮次 / 项目</th><th>灵敏度</th><th>命中 / 在靶</th><th>获取 / 角误差</th><th>原始分</th><th>输入</th></tr></thead><tbody>${record.runs.map((run,i)=>`<tr><td>${i+1} / ${tasks[run.task].short}</td><td>${fmt(run.sensitivity)}</td><td>${run.task==='track'?(run.trackingRatio*100).toFixed(1)+'%':run.hits}</td><td>${run.task==='track'?run.meanErrorDeg.toFixed(2)+'°':Math.round(run.meanAcquireMs)+' ms'}</td><td>${run.score.toFixed(2)}</td><td>${run.raw?'原始':run.inputMode==='cursor'?'光标':'普通锁定'}</td></tr>`).join('')}</tbody></table></div><p>甩枪/微调原始分 = 每秒命中 × 100 ×（0.65 + 0.35 × 路径效率）×（1 − 0.1 × 修正比例）。跟枪分 = 100 ×（0.85 × 在靶比例 + 0.15 × exp(−平均角误差/6)）。路径效率为最短必要角位移与实际路径之比；修正比例是接近后离开目标的启发式指标。习惯先验只用于最终选档，显示分数为实测加权分。</p><p>本次基于 ${p.duration} 秒 × 9 轮数据。${esc(analysis.confidenceExplanation)}</p></details>`;
+ $('copySensBtn').onclick=()=>copyText(fmt(r.sensitivity));
+ $('downloadReportBtn').onclick=()=>downloadReport(record,analysis);
+ if($('latestReportBtn'))$('latestReportBtn').onclick=()=>{activeReport=null;renderReport();};
+ renderHistory();
+}
+function renderHistory(){
+ $('historyList').innerHTML=history.length?history.map((record,i)=>{
+  const a=SensModel.analyze(record.profile,record.candidates,record.runs);if(!a.completed)return '';
+  const date=new Date(record.createdAt);return `<button data-history="${i}"><b>${fmt(a.recommended.sensitivity)}</b>${record.profile.dpi} DPI · ${esc(date.toLocaleDateString('zh-CN'))} ${esc(date.toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'}))}</button>`;
+ }).join(''):'<span class="muted" style="font-size:11px">暂无报告。完成一次测评后自动保存在此浏览器。</span>';
+ $('historyList').querySelectorAll('[data-history]').forEach(b=>b.onclick=()=>{activeReport=history[Number(b.dataset.history)];renderReport();window.scrollTo({top:0,behavior:'smooth'});});
+}
+async function copyText(value){
+ try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(value);toast('已复制灵敏度 '+value);return;}}catch(_){}
+ const el=document.createElement('textarea');el.value=value;el.style.position='fixed';el.style.opacity='0';document.body.appendChild(el);el.select();let ok=false;try{ok=document.execCommand('copy');}catch(_){}el.remove();
+ if(ok)toast('已复制灵敏度 '+value);else{toast('浏览器不允许自动复制，请选中报告中的数值手动复制。');}
+}
+function downloadReport(record,analysis){
+ const r=analysis.recommended,p=record.profile;
+ const lines=['准度档案 · 无畏契约个人灵敏度报告','生成时间：'+new Date().toLocaleString('zh-CN'),'',`建议灵敏度：${fmt(r.sensitivity)}`,`DPI：${p.dpi}`,`eDPI：${r.edpi.toFixed(1)}`,`cm/360（估算）：${r.cm360.toFixed(2)}`,`相对证据：${analysis.confidenceLabel}（非统计置信度）`,'','应用：保持相同DPI → 游戏设置 → 通用 → 鼠标 → 灵敏度：瞄准。','ADS与狙击镜倍率不属于本次测评。','',...analysis.reasons,'',...analysis.warnings,'','原始数据（JSON）',JSON.stringify({profile:p,candidates:record.candidates,runs:record.runs,analysis},null,2)];
+ const blob=new Blob(['\ufeff'+lines.join('\r\n')],{type:'text/plain;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='无畏契约灵敏度报告-'+fmt(r.sensitivity)+'.txt';a.click();setTimeout(()=>URL.revokeObjectURL(url),1500);toast('测试报告已生成。');
+}
+fillForm(profile);renderCalibration();renderSuite();renderHistory();
+// The UI intentionally keeps the initial screen at the personal profile, even on restore.
+})();
+
+</script>
+</body></html>
