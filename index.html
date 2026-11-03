@@ -24,10 +24,10 @@
   <button data-view="testing"><span>03</span><span>实战测评</span></button>
   <button data-view="report"><span>04</span><span>灵敏度报告</span></button>
  </nav>
- <div class="sidebar-bottom"><div class="local-note"><strong><i class="dot"></i> &nbsp; 本地运行 · 离线可用</strong>档案与报告仅保存在此浏览器。<br>不需要账号，也不上传鼠标数据。</div><div class="sidebar-foot">INDEPENDENT TOOL / V1.0<br>DESIGNED FOR VALORANT</div></div>
+ <div class="sidebar-bottom"><div class="local-note"><strong><i class="dot"></i> &nbsp; 本地运行 · 离线可用</strong>档案与报告仅保存在此浏览器。<br>不需要账号，也不上传鼠标数据。</div><div class="sidebar-foot">INDEPENDENT TOOL / V1.1.0<br>DESIGNED FOR VALORANT</div></div>
 </aside>
 <main class="main">
- <header class="topbar"><div class="breadcrumb">无畏契约 <span style="color:#435767"> / </span><b id="breadcrumb">个人灵敏度实验室</b></div><div class="top-status"><i class="dot"></i> OFFLINE READY <span style="color:#3f5566">|</span> <span>HTML EDITION</span></div></header>
+ <header class="topbar"><div class="breadcrumb">无畏契约 <span style="color:#435767"> / </span><b id="breadcrumb">个人灵敏度实验室</b></div><div class="top-status"><i class="dot"></i> OFFLINE READY <span style="color:#3f5566">|</span> <span>HTML · v1.1.0</span></div></header>
  <section id="view-profile" class="view">
   <div class="page-head"><div><div class="eyebrow">BUILT AROUND THE WAY YOU AIM</div><h1>把手感，变成数据<span class="red">。</span></h1><p>从你的习惯出发，找到更适合自己的无畏契约灵敏度。</p></div><div class="head-code">VALORANT / SENSITIVITY<br>01 — PROFILE SETUP</div></div>
   <div class="hero"><div class="hero-copy"><span class="tag"><i class="dot"></i> 内嵌 AIM LAB 风格训练</span><h2>移动、碰触、命中。</h2><p>无需点击开火。用甩枪、微调与跟枪对比三档灵敏度，让每一次鼠标移动参与推荐。</p><div class="hero-pills"><span>⌖ 常驻准星</span><span>◷ 实时倒计时</span><span>↗ 游戏数值输出</span></div></div><div class="hero-art" aria-hidden="true"><div class="art-line"></div><svg viewBox="0 0 500 240" preserveAspectRatio="xMidYMid slice"><defs><pattern id="grid" width="34" height="34" patternUnits="userSpaceOnUse"><path d="M34 0H0V34" fill="none" stroke="#48636d" stroke-width=".5" opacity=".4"/></pattern><radialGradient id="target"><stop stop-color="#ff5966" stop-opacity=".4"/><stop offset="1" stop-color="#ff5966" stop-opacity="0"/></radialGradient></defs><path d="M-70 240L140 153H380L600 240M140 153V-20M380 153V-20M140 153L-50 20M380 153L580 20" stroke="#365260" fill="none"/><path d="M140 153H380V0H140Z" fill="url(#grid)"/><path d="M-70 240H600M-20 216H550M40 190H490M90 171H430M260 153V240M200 153L140 240M320 153L380 240" stroke="#294450" fill="none"/><path d="M164 120Q245 174 340 73" stroke="#95f4d4" stroke-dasharray="3 6" fill="none" opacity=".6"/><circle cx="340" cy="73" r="46" fill="url(#target)"/><circle cx="340" cy="73" r="18" stroke="#ff5966" fill="#ff596612"/><circle cx="340" cy="73" r="11" fill="#ff5966"/><circle cx="164" cy="120" r="12" stroke="#657f8a" fill="#162b37"/><circle cx="245" cy="174" r="6" stroke="#95f4d4" fill="#95f4d415"/><path d="M336 43H344M370 69V77M336 103H344M310 69V77" stroke="#ff5966"/></svg><div class="cross-art"></div><span class="art-caption">ACQUIRE. ADJUST. TRACK.</span></div></div>
@@ -85,6 +85,7 @@
   'use strict';
   const MIN_SENS = 0.001;
   const MAX_SENS = 10;
+  const MODEL_VERSION = '1.1.0';
   const TASKS = ['flick', 'micro', 'track'];
   const TASK_NAMES = { flick: '甩枪', micro: '微调', track: '跟枪' };
   const WEIGHTS = Object.freeze({
@@ -160,7 +161,7 @@
   }
 
   function incomplete(errors, extra) {
-    return Object.assign({ completed: false, recommended: null, ranked: [], alternatives: [], confidence: 'insufficient', confidenceLabel: '数据不足', reasons: [], errors }, extra || {});
+    return Object.assign({ modelVersion: MODEL_VERSION, completed: false, recommended: null, ranked: [], alternatives: [], confidence: 'insufficient', confidenceLabel: '数据不足', reasons: [], errors, needRetest: false, invalidRounds: [] }, extra || {});
   }
 
   function analyze(input, candidates, runs) {
@@ -200,28 +201,25 @@
         measuredScore += weights[task] * relativeScore;
         metrics[task] = Object.assign({}, run);
       }
-      // Habit priors are deliberately tiny: total possible effect is below one point.
-      const direction = Math.sign(candidate.sensitivity - p.currentSens);
-      let prior = 0;
-      if (p.currentIssue === 'overshoot') prior -= direction * 0.25;
-      if (p.currentIssue === 'undershoot') prior += direction * 0.25;
-      if (p.style === 'arm') prior -= direction * 0.10;
-      if (p.style === 'wrist') prior += direction * 0.10;
+      // Selection and its tie threshold use exactly the rounded score displayed
+      // in the report. Habits shape the candidate range, never a hidden bonus.
+      const displayedScore = round(measuredScore, 2);
       return {
         id: candidate.id, candidate: Object.assign({}, candidate), sensitivity: candidate.sensitivity,
-        label: candidate.label, isCurrent: !!candidate.isCurrent,
-        score: round(measuredScore, 2), measuredScore: round(measuredScore, 2),
-        habitPrior: round(prior, 2), selectionScore: measuredScore + prior,
+        label: candidate.label, isCurrent: Math.abs(candidate.sensitivity - roundSens(p.currentSens)) < 0.000001,
+        score: displayedScore, measuredScore: displayedScore,
+        habitPrior: 0, selectionScore: displayedScore,
         taskScores, metrics, edpi: edpi(p.dpi, candidate.sensitivity), cm360: cm360(p.dpi, candidate.sensitivity)
       };
     });
-    rows.sort((a, b) => b.selectionScore - a.selectionScore || Math.abs(a.sensitivity - p.currentSens) - Math.abs(b.sensitivity - p.currentSens));
+    rows.sort((a, b) => b.measuredScore - a.measuredScore || Math.abs(a.sensitivity - p.currentSens) - Math.abs(b.sensitivity - p.currentSens));
     const top = rows[0];
-    const near = rows.filter(row => top.selectionScore - row.selectionScore <= 2);
-    const current = near.find(row => row.isCurrent);
+    const currentCandidate = rows.find(row => row.isCurrent) || null;
+    const currentScoreGap = currentCandidate ? round(top.measuredScore - currentCandidate.measuredScore, 2) : null;
+    const current = currentCandidate && currentScoreGap <= 2 ? currentCandidate : null;
     // A single short run cannot establish that a 1–2 point difference is meaningful.
     const recommended = current || top;
-    const gap = rows[0].selectionScore - rows[1].selectionScore;
+    const gap = round(rows[0].measuredScore - rows[1].measuredScore, 2);
     const warnings = [];
     const allRuns = Array.from(accepted.values());
     const cursorInput = allRuns.some(run => run.inputMode === 'cursor');
@@ -232,34 +230,53 @@
     const unstableFrames = allRuns.filter(run => finite(run.fps) && run.fps < 40);
     const sparseTrackSamples = allRuns.filter(run => run.task === 'track' && finite(run.measuredSeconds) && run.measuredSeconds < run.duration * 0.75);
     const noMouseMovement = allRuns.every(run => finite(run.movementCount) && run.movementCount <= 0);
+    const unknownActivity = allRuns.some(run => !finite(run.movementCount) || (run.task === 'track' && !finite(run.measuredSeconds)));
     const inconsistentInput = new Set(allRuns.map(run => (run.inputMode || 'unknown') + ':' + String(run.raw))).size > 1;
+    const invalidRounds = allRuns.map(run => {
+      const reasons = [], codes = [];
+      if (run.task !== 'track' && finite(run.hits) && run.hits <= 0) { reasons.push(TASK_NAMES[run.task] + '未记录到命中'); codes.push('zero_hits'); }
+      if (finite(run.movementCount) && run.movementCount <= 0) { reasons.push('未记录到鼠标移动'); codes.push('no_movement'); }
+      if (run.task === 'track' && finite(run.measuredSeconds) && run.measuredSeconds < run.duration * 0.75) { reasons.push('跟枪有效采样不足本轮时长的 75%'); codes.push('insufficient_track_sampling'); }
+      return reasons.length ? { candidateId: run.candidateId, task: run.task, sensitivity: run.sensitivity, roundIndex: runs.indexOf(run) + 1, reasons, reason: reasons.join('；'), codes } : null;
+    }).filter(Boolean);
+    if (invalidRounds.length) return incomplete(['九轮已结束，但有 ' + invalidRounds.length + ' 轮缺少有效瞄准数据；请重测这些轮次后再生成个人推荐。'], { completedCount: 9, totalCount: 9, ranked: rows, needRetest: true, invalidRounds, currentCandidate, currentScoreGap, quality: { zeroActivityRuns: noActivity.length, noMouseMovement, sparseTrackSampleRuns: sparseTrackSamples.length } });
     if (noMouseMovement) return incomplete(['九轮未记录到鼠标移动，无法生成个人推荐；请确认鼠标已锁定并能移动视角后重新测试。'], { completedCount: 9, totalCount: 9, ranked: rows, quality: { noMouseMovement: true } });
     if (noActivity.length === 9) return incomplete(['九轮都未记录到有效命中或跟枪得分，无法据此推荐个人灵敏度；请确认鼠标输入正常后重新测试。'], { completedCount: 9, totalCount: 9, ranked: rows, quality: { zeroActivityRuns: 9 } });
     if (cursorInput) warnings.push('包含普通指针模式数据：浏览器位移与游戏原始输入未建立一一对应，结果仅能作为方向参考；建议用锁定鼠标模式复测。');
     else if (adjustedInput) warnings.push('浏览器未启用无加速原始位移；系统加速可能改变匹配关系。推荐值仍可输入游戏，手感需在靶场验证。');
     else if (unknownInput) warnings.push('未记录原始输入状态，无法确认浏览器和游戏的位移一致性。');
     if (inconsistentInput) warnings.push('九轮的输入模式不同，候选之间的比较受影响，建议统一模式复测。');
+    if (unknownActivity) warnings.push('部分历史轮次缺少鼠标移动次数或跟枪有效采样时长，无法完整核验活动质量；本次仅作为低证据参考，建议重新测评。');
     if (smallSamples.length) warnings.push('部分甩枪或微调轮次不足五次命中，样本较少，建议选择 20 秒并复测。');
     if (noActivity.length) warnings.push('存在零命中或零跟枪得分的轮次，结果可能未反映正常操作。');
     if (unstableFrames.length) warnings.push('部分轮次记录到较低平均帧率；此信息只作提示，未直接扣分。');
     if (sparseTrackSamples.length) warnings.push('部分跟枪轮次的有效采样不足所选时长的 75%，可能有明显卡顿；建议关闭其他高负载应用后复测。');
-    if (gap <= 2) warnings.push('领先差距小于或等于 2 分；单次短测不足以证明优劣，优先保留接近当前的档位。');
-    const lowConfidence = cursorInput || adjustedInput || unknownInput || inconsistentInput || smallSamples.length > 0 || noActivity.length > 0 || sparseTrackSamples.length > 0 || gap < 3;
+    if (gap <= 2) warnings.push('领先的两个候选差距不超过 2 分，短测不足以证明其优劣，建议复测；是否保留当前档按当前档距最高分的差距判断。');
+    const lowConfidence = cursorInput || adjustedInput || unknownInput || unknownActivity || inconsistentInput || smallSamples.length > 0 || noActivity.length > 0 || sparseTrackSamples.length > 0 || gap < 3;
     const confidence = lowConfidence ? 'low' : 'moderate';
     const confidenceLabel = lowConfidence ? '建议复测' : '相对表现有优势';
+    const tiedAtTop = rows.filter(row => row.measuredScore === top.measuredScore);
+    const selectionReason = recommended.isCurrent ? (currentScoreGap === 0 ? (tiedAtTop.length > 1 ? 'exact_tie_keep_current' : 'current_best') : 'near_tie_keep_current') : 'alternative_best';
+    const topDescription = '实测最高档 ' + top.sensitivity.toFixed(3) + '，加权分 ' + top.measuredScore.toFixed(2);
+    let selectionExplanation;
+    if (selectionReason === 'current_best') selectionExplanation = '当前档 ' + recommended.sensitivity.toFixed(3) + ' 的实测加权分 ' + recommended.measuredScore.toFixed(2) + ' 为三档最高，因此保留当前已测试档位。';
+    else if (selectionReason === 'exact_tie_keep_current') selectionExplanation = '当前档 ' + recommended.sensitivity.toFixed(3) + ' 与其他候选同为最高分 ' + recommended.measuredScore.toFixed(2) + '；按同分保留规则继续使用当前档，本次未证明需要调整。';
+    else if (selectionReason === 'near_tie_keep_current') selectionExplanation = topDescription + '；当前档 ' + currentCandidate.sensitivity.toFixed(3) + ' 为 ' + currentCandidate.measuredScore.toFixed(2) + ' 分，落后 ' + currentScoreGap.toFixed(2) + ' 分（不超过 2 分）。按保守规则暂保留当前档，本次差距不足以支持调整。';
+    else selectionExplanation = topDescription + (currentCandidate ? '；当前档 ' + currentCandidate.sensitivity.toFixed(3) + ' 为 ' + currentCandidate.measuredScore.toFixed(2) + ' 分，落后 ' + currentScoreGap.toFixed(2) + ' 分，超过 2 分保留阈值。' : '；当前设置不在本次已测试档位中。') + '建议使用该已实测候选。';
     const reasons = [
       '三项先按各项目最高分归一化，再加权：甩枪 ' + Math.round(weights.flick * 100) + '%、微调 ' + Math.round(weights.micro * 100) + '%、跟枪 ' + Math.round(weights.track * 100) + '%。',
-      '推荐来自实际测试过的三位小数档位；个人习惯仅提供至多 ±0.35 分的微小先验，不替代测试表现。',
-      recommended.id === top.id ? '该档在本次比较中的加权表现领先或持平。' : '当前档距领先档不超过 2 分，按保守规则保留当前档，避免因短测噪声频繁调整。',
+      '推荐来自实际测试过的三位小数档位；个人习惯决定候选范围与测试侧重，最终选档只比较报告中显示的实测加权分，不加隐藏先验。',
+      selectionExplanation,
       '这是单人、短时、浏览器内的启发式相对比较，未建立统计置信区间，也不能证明存在唯一最优灵敏度。'
     ];
     const changePct = round((recommended.sensitivity / p.currentSens - 1) * 100, 1);
     const alternatives = rows.filter(row => row.id !== recommended.id).map(row => ({ id: row.id, sensitivity: row.sensitivity, score: row.score, changePct: round((row.sensitivity / recommended.sensitivity - 1) * 100, 1), label: row.label }));
     return {
-      completed: true, completedCount: 9, totalCount: 9, recommended, highestScoring: top, ranked: rows,
+      modelVersion: MODEL_VERSION, completed: true, completedCount: 9, totalCount: 9, recommended, highestScoring: top, ranked: rows,
+      selectionReason, selectionExplanation, currentScoreGap, currentCandidate, needRetest: false, invalidRounds: [],
       confidence, confidenceLabel, confidenceExplanation: '该标记仅描述本次相对证据的强弱，并非统计置信度。',
       reasons, warnings, errors: [], changePct, alternatives, weights,
-      tieThreshold: 2, topGap: round(gap, 2), quality: { cursorInput, adjustedInput, unknownInput, inconsistentInput, smallSampleRuns: smallSamples.length, zeroActivityRuns: noActivity.length, lowFpsRuns: unstableFrames.length, sparseTrackSampleRuns: sparseTrackSamples.length, noMouseMovement },
+      tieThreshold: 2, topGap: round(gap, 2), quality: { cursorInput, adjustedInput, unknownInput, unknownActivity, inconsistentInput, smallSampleRuns: smallSamples.length, zeroActivityRuns: noActivity.length, lowFpsRuns: unstableFrames.length, sparseTrackSampleRuns: sparseTrackSamples.length, noMouseMovement },
       formula: 'eDPI = DPI × 游戏灵敏度；cm/360 = 2.54 × 360 ÷ (DPI × 灵敏度 × 0.07)。0.07 是社区通用换算系数，并非 Riot 公开的精度保证。'
     };
   }
@@ -465,6 +482,9 @@
       const s = this._stats;
       if (!s) return 0;
       if (this.config.task === 'track') {
+        // A moving target may pass the resting crosshair. Without mouse input,
+        // that is not evidence of tracking skill and must not earn a score.
+        if (s.movementCount <= 0) return 0;
         const ratio = s.measuredSeconds > 0 ? s.trackSeconds / s.measuredSeconds : 0;
         const error = s.measuredSeconds > 0 ? s.errorIntegral / s.measuredSeconds : 90;
         return finite(100 * (0.85 * ratio + 0.15 * Math.exp(-error / 6)));
@@ -663,7 +683,8 @@ function restoreRecord(record){
  const candidates=matchingCandidates(checked.profile,record.candidates);
  if(!candidates||!Array.isArray(record.runs)||record.runs.length!==9||!record.runs.every(r=>validRound(r,checked.profile,candidates)))return null;
  if(!['flick','micro','track'].every(task=>new Set(record.runs.filter(r=>r.task===task).map(r=>r.seed)).size===1))return null;
- if(!SensModel.analyze(checked.profile,candidates,record.runs).completed)return null;
+ const analysis=SensModel.analyze(checked.profile,candidates,record.runs);
+ if(!analysis.completed&&!analysis.needRetest)return null;
  return {...record,profile:checked.profile,candidates};
 }
 function restoreSuite(saved,p){
@@ -937,7 +958,7 @@ function renderReport(){
  if(!record&&profile)record=currentSuiteRecord();
  if(!record){$('reportContent').innerHTML=emptyReportMarkup;renderHistory();return;}
  const analysis=SensModel.analyze(record.profile,record.candidates,record.runs);
- if(!analysis.completed){$('reportContent').innerHTML=`<div class="panel empty"><h2>数据还不足以推荐。</h2><p>${analysis.errors.map(esc).join('<br>')}</p><button class="btn btn-primary" data-goto="testing">返回测评 →</button></div>`;renderHistory();return;}
+ if(!analysis.completed){$('reportContent').innerHTML=`<div class="panel empty"><span class="tag">算法 v${esc(analysis.modelVersion||'1.1.0')}</span><h2 style="margin-top:16px">数据还不足以推荐。</h2><p>${analysis.errors.map(esc).join('<br>')}</p>${analysis.invalidRounds?.length?`<div class="explanation" style="max-width:600px;margin:20px auto;text-align:left">${analysis.invalidRounds.map(run=>`第 ${run.roundIndex} 轮 · ${tasks[run.task].short} · ${fmt(run.sensitivity)}：${esc(run.reason)}`).join('<br>')}</div>`:''}<p>无效轮次不会被当作原值更合适的证据。请返回测评页重新测评。</p><button class="btn btn-primary" data-goto="testing">返回测评 →</button></div>`;renderHistory();return;}
  activeReport=record;
  if(suite&&record.id===suite.id&&!suite.saved){
   if(!history.some(h=>h.id===record.id))history.unshift(record);
@@ -945,12 +966,15 @@ function renderReport(){
  }
  const p=record.profile,r=analysis.recommended,change=analysis.changePct;
  const isHistory=!suite||record.id!==suite.id;
+ const heldForTie=['near_tie_keep_current','exact_tie_keep_current'].includes(analysis.selectionReason);
+ const selectionTitle=heldForTie?'三档表现接近，暂保留当前值':r.isCurrent?(analysis.topGap===0?'当前档与其他档位并列最高':'当前档在本次测试中得分最高'):'另一档在本次测试中表现更好';
  $('reportContent').innerHTML=`
- <div class="info-box" style="margin-bottom:20px"><b>${isHistory?'正在查看历史报告':'当前测评报告'}</b> · ${esc(new Date(record.createdAt).toLocaleString('zh-CN'))}${isHistory&&suite&&suite.runs.length===9?' <button class="btn btn-ghost" id="latestReportBtn" style="margin-left:12px">查看当前测评报告 →</button>':''}</div>
- <div class="report-main"><section class="result-card"><div class="mini-label">你的建议灵敏度 / SENSITIVITY: AIM</div><div class="big-value">${fmt(r.sensitivity)}</div><div class="result-description">${p.dpi} DPI 下使用 · ${change===0?'保留当前档':`相较当前 ${fmt(p.currentSens)} ${change>0?'提高':'降低'} ${Math.abs(change).toFixed(1)}%`}</div><div class="result-metrics"><div><b>${r.edpi.toFixed(1)}</b><span>eDPI</span></div><div><b>${r.cm360.toFixed(1)} cm</b><span>约 / 360°</span></div><div><b>${r.score.toFixed(1)}</b><span>加权相对表现 / 100</span></div></div><div class="suite-actions"><button class="btn btn-mint" id="copySensBtn">复制 ${fmt(r.sensitivity)}</button><button class="btn btn-ghost" id="downloadReportBtn">下载测试报告 ↓</button></div></section><section class="panel"><div class="panel-head"><h3>填入游戏，即可应用</h3><span class="mini-label">APPLY IN GAME</span></div><div class="panel-body"><ol class="numbered"><li>鼠标驱动 DPI 保持为 <b class="mint">${p.dpi}</b>。</li><li>进入无畏契约 → 设置 → 通用 → 鼠标。</li><li>在「灵敏度：瞄准」输入 <b class="mint mono">${fmt(r.sensitivity)}</b>，检查游戏保留的数值。</li><li>进靶场验证转身、架点和点头；数值可用，是否更适合你仍要以游戏表现为准。</li></ol><span class="tag">${esc(analysis.confidenceLabel)} · 非统计置信度</span></div></section></div>
- <section class="panel"><div class="panel-head"><h3>三档表现，展开来看</h3><span class="mini-label">NORMALIZED / 0–100</span></div><div style="overflow:auto"><table class="report-table"><thead><tr><th>测试档位</th><th>游戏灵敏度</th><th>甩枪</th><th>微调</th><th>跟枪</th><th>加权表现</th></tr></thead><tbody>${analysis.ranked.map(row=>`<tr class="${row.id===r.id?'winner':''}"><td>${row.id===r.id?'✓ 建议档':esc(row.label)}${row.isCurrent?' · 当前':''}</td><td>${fmt(row.sensitivity)}</td><td>${row.taskScores.flick.toFixed(1)}</td><td>${row.taskScores.micro.toFixed(1)}</td><td>${row.taskScores.track.toFixed(1)}</td><td>${row.score.toFixed(1)}<div class="score-bar"><i style="width:${row.score}%"></i></div></td></tr>`).join('')}</tbody></table></div><div class="panel-body explanation">${analysis.reasons.map(s=>`<p>${esc(s)}</p>`).join('')}<p class="muted">每项最高表现记为 100，仅用于本次三档横向对比。各档使用相同任务种子与时长；命中越多，后续目标也越多，测试不是完全相同的录像回放。</p></div></section>
+ <div class="info-box" style="margin-bottom:20px"><b>${isHistory?'正在查看历史报告':'当前测评报告'}</b> · ${esc(new Date(record.createdAt).toLocaleString('zh-CN'))} · 算法 v${esc(analysis.modelVersion)}${isHistory?' · 使用当前算法重新分析原始记录':''}${isHistory&&suite&&suite.runs.length===9?' <button class="btn btn-ghost" id="latestReportBtn" style="margin-left:12px">查看当前测评报告 →</button>':''}</div>
+ <div class="panel" id="decisionSummary" style="margin-bottom:23px"><div class="panel-body"><div class="eyebrow">WHY THIS VALUE / 为什么得到这个数值</div><h2 style="font-size:21px">${selectionTitle}</h2><p class="explanation" style="margin-top:12px">${esc(analysis.selectionExplanation)}</p><div class="stats-strip"><div><strong>${fmt(analysis.highestScoring.sensitivity)}</strong><span>本次实测最高分档 · ${analysis.highestScoring.score.toFixed(2)} 分</span></div><div><strong>${analysis.currentCandidate.score.toFixed(2)}</strong><span>原值 ${fmt(analysis.currentCandidate.sensitivity)} 的实测分数</span></div><div><strong>${analysis.currentScoreGap.toFixed(2)}</strong><span>原值与最高档差距 / 分</span></div></div><p class="muted" style="font-size:11px;margin-top:14px">${heldForTie?'这是差距接近时的保守建议，并未证明原值最优。':'结果只代表本次测试过的三档；当前档也可能真实胜出。'}相同结果不代表程序直接复制了输入值。</p></div></div>
+ <div class="report-main"><section class="result-card"><div class="mini-label">${heldForTie?'暂保留的灵敏度':'本次建议灵敏度'} / SENSITIVITY: AIM</div><div class="big-value">${fmt(r.sensitivity)}</div><div class="result-description">${p.dpi} DPI 下使用 · ${change===0?'保留当前档':`相较当前 ${fmt(p.currentSens)} ${change>0?'提高':'降低'} ${Math.abs(change).toFixed(1)}%`}</div><div class="result-metrics"><div><b>${r.edpi.toFixed(1)}</b><span>eDPI</span></div><div><b>${r.cm360.toFixed(1)} cm</b><span>约 / 360°</span></div><div><b>${r.score.toFixed(2)}</b><span>加权相对表现 / 100</span></div></div><div class="suite-actions"><button class="btn btn-mint" id="copySensBtn">复制 ${fmt(r.sensitivity)}</button><button class="btn btn-ghost" id="downloadReportBtn">下载测试报告 ↓</button></div></section><section class="panel"><div class="panel-head"><h3>填入游戏，即可应用</h3><span class="mini-label">APPLY IN GAME</span></div><div class="panel-body"><ol class="numbered"><li>鼠标驱动 DPI 保持为 <b class="mint">${p.dpi}</b>。</li><li>进入无畏契约 → 设置 → 通用 → 鼠标。</li><li>在「灵敏度：瞄准」输入 <b class="mint mono">${fmt(r.sensitivity)}</b>，检查游戏保留的数值。</li><li>进靶场验证转身、架点和点头；数值可用，是否更适合你仍要以游戏表现为准。</li></ol><span class="tag">${esc(analysis.confidenceLabel)} · 非统计置信度</span></div></section></div>
+ <section class="panel"><div class="panel-head"><h3>三档表现，展开来看</h3><span class="mini-label">NORMALIZED / 0–100</span></div><div style="overflow:auto"><table class="report-table"><thead><tr><th>测试档位</th><th>游戏灵敏度</th><th>甩枪</th><th>微调</th><th>跟枪</th><th>加权表现</th></tr></thead><tbody>${analysis.ranked.map(row=>`<tr class="${row.id===r.id?'winner':''}"><td>${row.id===r.id?'✓ 建议档':esc(row.label)}${row.isCurrent?' · 当前':''}</td><td>${fmt(row.sensitivity)}</td><td>${row.taskScores.flick.toFixed(1)}</td><td>${row.taskScores.micro.toFixed(1)}</td><td>${row.taskScores.track.toFixed(1)}</td><td>${row.score.toFixed(2)}<div class="score-bar"><i style="width:${row.score}%"></i></div></td></tr>`).join('')}</tbody></table></div><div class="panel-body explanation">${analysis.reasons.map(s=>`<p>${esc(s)}</p>`).join('')}<p class="muted">每项最高表现记为 100，仅用于本次三档横向对比。各档使用相同任务种子与时长；命中越多，后续目标也越多，测试不是完全相同的录像回放。</p></div></section>
  ${analysis.warnings.length?`<div class="info-box warning"><b>本次证据的限制</b><br>${analysis.warnings.map(esc).join('<br>')}</div>`:''}
- <details><summary>查看原始记录与推荐依据</summary><div style="overflow:auto"><table class="report-table"><thead><tr><th>轮次 / 项目</th><th>灵敏度</th><th>命中 / 在靶</th><th>获取 / 角误差</th><th>原始分</th><th>输入</th></tr></thead><tbody>${record.runs.map((run,i)=>`<tr><td>${i+1} / ${tasks[run.task].short}</td><td>${fmt(run.sensitivity)}</td><td>${run.task==='track'?(run.trackingRatio*100).toFixed(1)+'%':run.hits}</td><td>${run.task==='track'?run.meanErrorDeg.toFixed(2)+'°':Math.round(run.meanAcquireMs)+' ms'}</td><td>${run.score.toFixed(2)}</td><td>${run.raw?'原始':run.inputMode==='cursor'?'光标':'普通锁定'}</td></tr>`).join('')}</tbody></table></div><p>甩枪/微调原始分 = 每秒命中 × 100 ×（0.65 + 0.35 × 路径效率）×（1 − 0.1 × 修正比例）。跟枪分 = 100 ×（0.85 × 在靶比例 + 0.15 × exp(−平均角误差/6)）。路径效率为最短必要角位移与实际路径之比；修正比例是接近后离开目标的启发式指标。习惯先验只用于最终选档，显示分数为实测加权分。</p><p>本次基于 ${p.duration} 秒 × 9 轮数据。${esc(analysis.confidenceExplanation)}</p></details>`;
+ <details><summary>查看原始记录与推荐依据</summary><div style="overflow:auto"><table class="report-table"><thead><tr><th>轮次 / 项目</th><th>灵敏度</th><th>命中 / 在靶</th><th>获取 / 角误差</th><th>原始分</th><th>输入</th></tr></thead><tbody>${record.runs.map((run,i)=>`<tr><td>${i+1} / ${tasks[run.task].short}</td><td>${fmt(run.sensitivity)}</td><td>${run.task==='track'?(run.trackingRatio*100).toFixed(1)+'%':run.hits}</td><td>${run.task==='track'?run.meanErrorDeg.toFixed(2)+'°':Math.round(run.meanAcquireMs)+' ms'}</td><td>${run.score.toFixed(2)}</td><td>${run.raw?'原始':run.inputMode==='cursor'?'光标':'普通锁定'}</td></tr>`).join('')}</tbody></table></div><p>甩枪/微调原始分 = 每秒命中 × 100 ×（0.65 + 0.35 × 路径效率）×（1 − 0.1 × 修正比例）。跟枪分 = 100 ×（0.85 × 在靶比例 + 0.15 × exp(−平均角误差/6)）。路径效率为最短必要角位移与实际路径之比；修正比例是接近后离开目标的启发式指标。个人习惯只影响候选范围和任务权重；选档直接使用表中实测加权分，没有隐藏加分。无鼠标移动的跟枪轮次记为 0 分，并要求重测。</p><p>本次基于 ${p.duration} 秒 × 9 轮数据。${esc(analysis.confidenceExplanation)}</p></details>`;
  $('copySensBtn').onclick=()=>copyText(fmt(r.sensitivity));
  $('downloadReportBtn').onclick=()=>downloadReport(record,analysis);
  if($('latestReportBtn'))$('latestReportBtn').onclick=()=>{activeReport=null;renderReport();};
@@ -958,8 +982,8 @@ function renderReport(){
 }
 function renderHistory(){
  $('historyList').innerHTML=history.length?history.map((record,i)=>{
-  const a=SensModel.analyze(record.profile,record.candidates,record.runs);if(!a.completed)return '';
-  const date=new Date(record.createdAt);return `<button data-history="${i}"><b>${fmt(a.recommended.sensitivity)}</b>${record.profile.dpi} DPI · ${esc(date.toLocaleDateString('zh-CN'))} ${esc(date.toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'}))}</button>`;
+  const a=SensModel.analyze(record.profile,record.candidates,record.runs);if(!a.completed&&!a.needRetest)return '';
+  const date=new Date(record.createdAt);return `<button data-history="${i}"><b>${a.completed?fmt(a.recommended.sensitivity):'需重测'}</b>${record.profile.dpi} DPI · ${esc(date.toLocaleDateString('zh-CN'))} ${esc(date.toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'}))}</button>`;
  }).join(''):'<span class="muted" style="font-size:11px">暂无报告。完成一次测评后自动保存在此浏览器。</span>';
  $('historyList').querySelectorAll('[data-history]').forEach(b=>b.onclick=()=>{activeReport=history[Number(b.dataset.history)];renderReport();window.scrollTo({top:0,behavior:'smooth'});});
 }
@@ -970,7 +994,7 @@ async function copyText(value){
 }
 function downloadReport(record,analysis){
  const r=analysis.recommended,p=record.profile;
- const lines=['准度档案 · 无畏契约个人灵敏度报告','生成时间：'+new Date().toLocaleString('zh-CN'),'',`建议灵敏度：${fmt(r.sensitivity)}`,`DPI：${p.dpi}`,`eDPI：${r.edpi.toFixed(1)}`,`cm/360（估算）：${r.cm360.toFixed(2)}`,`相对证据：${analysis.confidenceLabel}（非统计置信度）`,'','应用：保持相同DPI → 游戏设置 → 通用 → 鼠标 → 灵敏度：瞄准。','ADS与狙击镜倍率不属于本次测评。','',...analysis.reasons,'',...analysis.warnings,'','原始数据（JSON）',JSON.stringify({profile:p,candidates:record.candidates,runs:record.runs,analysis},null,2)];
+ const lines=['准度档案 · 无畏契约个人灵敏度报告','生成时间：'+new Date().toLocaleString('zh-CN'),'算法版本：'+analysis.modelVersion,'选档说明：'+analysis.selectionExplanation,'本次最高分档：'+fmt(analysis.highestScoring.sensitivity)+'（'+analysis.highestScoring.score.toFixed(2)+' 分）','原值距最高档：'+analysis.currentScoreGap.toFixed(2)+' 分','',`建议灵敏度：${fmt(r.sensitivity)}`,`DPI：${p.dpi}`,`eDPI：${r.edpi.toFixed(1)}`,`cm/360（估算）：${r.cm360.toFixed(2)}`,`相对证据：${analysis.confidenceLabel}（非统计置信度）`,'','应用：保持相同DPI → 游戏设置 → 通用 → 鼠标 → 灵敏度：瞄准。','ADS与狙击镜倍率不属于本次测评。','',...analysis.reasons,'',...analysis.warnings,'','原始数据（JSON）',JSON.stringify({profile:p,candidates:record.candidates,runs:record.runs,analysis},null,2)];
  const blob=new Blob(['\ufeff'+lines.join('\r\n')],{type:'text/plain;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='无畏契约灵敏度报告-'+fmt(r.sensitivity)+'.txt';a.click();setTimeout(()=>URL.revokeObjectURL(url),1500);toast('测试报告已生成。');
 }
 fillForm(profile);renderCalibration();renderSuite();renderHistory();
